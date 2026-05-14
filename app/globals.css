@@ -2,7 +2,7 @@
 
 @theme {
   /* 🎨 Core Colors (Light Mode Defaults using Tailwind Variables) */
-  --color-background: var(--color-white);
+  --color-background: var(--color-neutral-100);
   --color-foreground: var(--color-neutral-950);
 
   --color-primary: var(--color-neutral-950);
@@ -14,19 +14,27 @@
   --color-muted: var(--color-neutral-100);
   --color-muted-foreground: var(--color-neutral-500);
 
+  --color-accent: var(--color-blue-700);
+
   --color-border: var(--color-neutral-200);
 
   /* 📏 Border Radius */
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
   --radius-sm: calc(0.5rem - 4px);
-  
+
   /* 🎭 Custom Animations */
   @keyframes spotlight {
-    0% { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
-    100% { opacity: 1; transform: translate(-50%, -40%) scale(1); }
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -40%) scale(1);
+    }
   }
-  --animate-spotlight: spotlight 2s ease .75s 1 forwards;
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
 }
 
 /* 🌙 Dark Mode handling */
@@ -34,41 +42,44 @@
 
 @layer base {
   .dark {
+    --color-accent: var(--color-blue-500);
+
     /* Pure black base with crisp light text for high contrast */
     --color-background: var(--color-black);
     --color-foreground: var(--color-neutral-50);
-    
+
     --color-primary: var(--color-white);
     --color-primary-foreground: var(--color-neutral-950);
-    
+
     --color-secondary: var(--color-neutral-900);
     --color-secondary-foreground: var(--color-neutral-50);
-    
+
     --color-muted: var(--color-neutral-900);
     --color-muted-foreground: var(--color-neutral-400);
-    
+
+
     --color-border: var(--color-neutral-800);
   }
 }
 
 /* 🛠️ Global Resets & Scrollbar */
 @layer base {
-  * { 
-    @apply border-border outline-none; 
+  * {
+    @apply border-border outline-none;
   }
-  body { 
-    @apply bg-background text-foreground antialiased; 
+  body {
+    @apply bg-background text-foreground antialiased;
   }
-  
+
   /* Premium Minimalist Scrollbar */
-  ::-webkit-scrollbar { 
-    width: 6px; 
+  ::-webkit-scrollbar {
+    width: 6px;
   }
-  ::-webkit-scrollbar-track { 
-    @apply bg-transparent; 
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
   }
-  ::-webkit-scrollbar-thumb { 
-    @apply bg-neutral-300 rounded-full; 
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
   }
   .dark ::-webkit-scrollbar-thumb {
     @apply bg-neutral-800;

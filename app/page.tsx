@@ -12,20 +12,20 @@ export default function Home() {
       <section className="">
         <HeroSection />
       </section>
-      <section className="flex flex-col my-auto mx-auto h-auto border-b border-zinc-200 dark:border-zinc-800/50">
+      <section id="stats" className="">
+        <BentoGridSection />
+      </section>
+      <section className="flex flex-col my-auto mx-auto h-auto ">
         <ProjectsSection isHome={true} />
       </section>
-      <section id="github" className="py-8">
+      <section id="github" className="">
         <GithubActivitySection />
       </section>
       <section id="about" className="">
         <AboutSection />
       </section>
-      <section id="contact" className="py-16">
-        <ContactMe isHomePage={true}/>
-      </section>
-      <section id="stats" className="py-16">
-        <BentoGridSection />
+      <section id="contact" className="">
+        <ContactMe isHomePage={true} />
       </section>
       <section className="">
         <WhatICanOffer />

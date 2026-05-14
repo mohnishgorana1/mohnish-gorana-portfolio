@@ -1,6 +1,4 @@
 "use client";
-import Navbar from "@/components/Navbar";
-import { TextScramble } from "@/components/ui/text-scramble";
 import { machineCodingTaskConfigs } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,13 +12,12 @@ export default function MachineCodingLayout({
   const pathname = usePathname();
   const BASE_PATH = "/machine-coding-tasks";
 
-  // --- LOGIC START ---
+  // --- LOGIC START (100% UNTOUCHED) ---
 
   // 1. Determine current page slug
   const currentPageSlug = pathname?.split("/").filter(Boolean).pop();
 
   // 2. Check if we are on the main listing page
-  // (Check if the last segment is strictly 'machine-coding-tasks')
   const isHomePage = currentPageSlug === "machine-coding-tasks";
 
   // 3. Format the name directly
@@ -46,70 +43,54 @@ export default function MachineCodingLayout({
   // --- LOGIC END ---
 
   return (
-    <main className="min-h-screen bg-backgroud px-2">
-      <header className="mt-3 pb-4 flex items-end justify-between mx-auto">
+    <main className="min-h-screen bg-background px-4 sm:px-6 w-full max-w-6xl mx-auto pt-24 pb-12">
+      
+      {/* SHARP HEADER */}
+      <header className="mb-12 pb-6 border-b border-border/50 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        
         <Link
           href={
             isHomePage
               ? BASE_PATH
-              : `${BASE_PATH}/${
-                  machineCodingTaskConfigs[currentIndex]?.path ?? ""
-                }`
+              : `${BASE_PATH}/${machineCodingTaskConfigs[currentIndex]?.path ?? ""}`
           }
-          className="group relative"
+          className="group flex flex-col"
         >
-          <span
-            className="block text-[10px] sm:text-xs font-bold tracking-[0.2em] text-gray-500 dark:text-gray-300 uppercase mb-1 group-hover:text-blue-400 group-hover:dark:text-blue-400 transition-colors"
-          >
-            {isHomePage ? "Dashboard" : "Current Challenge"}
+          <span className="text-[10px] font-mono font-bold tracking-widest text-muted-foreground uppercase mb-2">
+            {isHomePage ? "Directory" : "Current Execution"}
           </span>
-
-          {/* Main Title with Gradient */}
-          <h1
-            className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-blue-700 to-indigo-600 dark:from-gray-50 dark:via-blue-400 dark:to-indigo-300 group-hover:to-blue-600 dark:group-hover:to-blue-400 transition-all duration-300"
-          >
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground group-hover:text-muted-foreground transition-colors duration-300">
             {currentTaskName}
           </h1>
-
-          {/* Animated Underline */}
-          <span
-            // Updated: bg-blue-600 -> dark:bg-blue-400
-            className="absolute -bottom-1 left-0 w-0 h-[3px] bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full rounded-full opacity-80"
-          ></span>
         </Link>
 
+        {/* NEXT UP BUTTON (Sharp & Minimal) */}
         {!isHomePage && (
           <Link
             href={nextPath}
-            className="flex items-center gap-x-2 group pl-4 pb-1"
+            className="group flex items-center gap-4 text-right hover:bg-secondary/30 p-2 -mr-2 transition-colors duration-300"
           >
             <div className="flex flex-col items-end">
-              <span
-                className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5 group-hover:text-blue-500 transition-colors"
-              >
+              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest mb-1">
                 Next Up
               </span>
-              <span
-                className="text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-blue-700 group-hover:dark:text-blue-400 transition-colors underline-offset-4 group-hover:underline"
-              >
+              <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                 {nextLabel}
               </span>
             </div>
-            {/* Icon Wrapper */}
-            <div
-              className="bg-white dark:bg-gray-800 p-1.5 rounded-full shadow-sm border border-gray-200 dark:border-gray-700 group-hover:border-blue-200 group-hover:dark:border-blue-500 group-hover:bg-blue-50 group-hover:dark:bg-blue-900/50 transition-all"
-            >
-              <TbPlayerTrackNextFilled
-                className="text-gray-400 dark:text-gray-500 w-3 h-3 sm:w-4 sm:h-4 group-hover:text-blue-600 group-hover:dark:text-blue-400 group-hover:translate-x-0.5 transition-transform duration-200"
-              />
+            {/* Sharp Square Icon Box */}
+            <div className="flex items-center justify-center size-10 border border-border bg-secondary text-foreground group-hover:bg-foreground group-hover:text-background transition-all duration-300 shrink-0">
+              <TbPlayerTrackNextFilled className="w-4 h-4" />
             </div>
           </Link>
         )}
       </header>
 
-      <div className="space-y-4 mx-auto py-4 md:py-2 ">
-        <div className="my-1">{children}</div>
+      {/* RENDER CHILDREN */}
+      <div className="w-full">
+        {children}
       </div>
+      
     </main>
   );
 }

@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { Send, Mail, MapPin, Check, Loader2 } from "lucide-react";
 import { BsGithub, BsLinkedin, BsWhatsapp } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { scale } from "motion/react";
 
 const socialTextVariants = {
   collapsed: { width: 0, opacity: 0, marginLeft: 0 },
@@ -12,14 +10,14 @@ const socialTextVariants = {
     width: "auto",
     opacity: 1,
     marginLeft: 12,
-    transition: { duration: 0.5, ease: "easeInOut" },
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 };
 
 const SOCIAL_LINKS = [
-  { icon: BsWhatsapp, href: "https://wa.me/+917999517181", title: "WhatsApp", color: "text-green-500" },
-  { icon: BsLinkedin, href: "https://www.linkedin.com/in/mohnish-gorana-804374340/", title: "LinkedIn", color: "text-blue-600" },
-  { icon: BsGithub, href: "https://github.com/mohnishgorana1", title: "GitHub", color: "text-zinc-900 dark:text-zinc-50" },
+  { icon: BsWhatsapp, href: "https://wa.me/+917999517181", title: "WhatsApp", color: "hover:text-green-500 hover:border-green-500/50" },
+  { icon: BsLinkedin, href: "https://www.linkedin.com/in/mohnish-gorana-804374340/", title: "LinkedIn", color: "hover:text-blue-500 hover:border-blue-500/50" },
+  { icon: BsGithub, href: "https://github.com/mohnishgorana1", title: "GitHub", color: "hover:text-foreground hover:border-border" },
 ];
 
 const ACCESS_KEY = String(process.env.NEXT_PUBLIC_WEB3FORM_PORTFOLIO_CONTACT_ME_ACCESS_KEY);
@@ -30,25 +28,34 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // 🌟 TUMHARA GLASS THEME
+  const glassClasses = `
+    backdrop-blur-xl border 
+    bg-white/40 border-black/10 shadow-lg shadow-black/5
+    dark:bg-black/40 dark:border-white/10 dark:shadow-none
+  `;
+
+  const inputClasses = `
+    w-full p-4 rounded-2xl bg-secondary/50 border border-border/50 
+    focus:border-foreground/50 focus:bg-background outline-none transition-all
+    text-foreground placeholder:text-muted-foreground/60
+  `;
+
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.9},
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 1.2,
-        ease: "easeInOut",
-        staggerChildren: 0.2,
-      },
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setStatus("");
@@ -62,6 +69,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
       if (json.success) {
         setIsSuccess(true);
         setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setIsSuccess(false), 5000); // Reset success state after 5s
       } else {
         setStatus("Submission failed. Please try again.");
       }
@@ -73,123 +81,171 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
   };
 
   return (
-    <section id="contact" className="py-20 px-1 sm:px-2 overflow-hidden">
+    <section id="contact" className={`w-full bg-background overflow-hidden ${isHomePage ? "py-12" : "pt-20 pb-12"}`}>
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        // viewport={{ once: true, amount: 0.2 }}
-        className="relative mx-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 md:p-8 shadow-2xl transition-colors duration-500"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-6xl mx-auto px-4 relative z-10"
       >
-        {/* --- Sharp Blue Corners --- */}
-        <div className="absolute -top-[5px] -left-[5px] w-12 h-12 border-t-4 border-l-4 border-blue-600 dark:border-blue-500" />
-        <div className="absolute -top-[5px] -right-[5px] w-12 h-12 border-t-4 border-r-4 border-blue-600 dark:border-blue-500" />
-        <div className="absolute -bottom-[5px] -left-[5px] w-12 h-12 border-b-4 border-l-4 border-blue-600 dark:border-blue-500" />
-        <div className="absolute -bottom-[5px] -right-[5px] w-12 h-12 border-b-4 border-r-4 border-blue-600 dark:border-blue-500" />
+        
+        {/* Subtle Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-secondary/80 dark:bg-secondary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Panel: Info */}
-          <div className="lg:col-span-5 space-y-8">
-            <motion.div variants={itemVariants}>
-              <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-zinc-900 dark:text-zinc-50 uppercase">
-                Let&apos;s Build <span className="text-blue-600 italic">Something</span>
-              </h2>
-              <p className="mt-4 text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                Ready to turn your vision into reality? Send me a message and let&apos;s start building!
-              </p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-4">
-              <ContactDetail icon={Mail} title="Email" content="mohnishgorana1@gmail.com" link="mailto:mohnishgorana1@gmail.com" />
-              <ContactDetail icon={MapPin} title="Location" content="Neemuch, MP, India" />
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="pt-6">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400 mb-4">Socials</h3>
-              <div className="flex flex-wrap gap-3">
-                {SOCIAL_LINKS.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.href}
-                    target="_blank"
-                    whileHover="expanded"
-                    initial="collapsed"
-                    className={`${social.color} flex items-center p-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full`}
-                  >
-                    <social.icon className="w-5 h-5" />
-                    <motion.span variants={socialTextVariants} className="whitespace-nowrap font-bold text-sm">
-                      {social.title}
-                    </motion.span>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Panel: Form */}
-          <motion.div variants={itemVariants} className="lg:col-span-7">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  className="w-full p-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-blue-500 outline-none transition-all"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className="w-full p-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-blue-500 outline-none transition-all"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  required
-                />
-              </div>
-              <textarea
-                placeholder="How can I help you?"
-                rows={6}
-                className="w-full p-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-blue-500 outline-none transition-all resize-none"
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                required
-              />
+        <div className={`relative p-6 sm:p-10 md:p-14 rounded-[2.5rem] ${glassClasses}`}>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            {/* =========================================
+                LEFT PANEL: Info & Socials
+            ========================================= */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-10">
               
-              <button
-                type="submit"
-                disabled={loading || isSuccess}
-                className={`w-full py-4 font-bold uppercase tracking-widest transition-all shadow-lg
-                  ${isSuccess ? "bg-green-600 text-white" : "bg-blue-600 hover:bg-blue-700 text-white"}
-                `}
-              >
-                <AnimatePresence mode="wait">
-                  {isSuccess ? (
-                    <motion.div key="s" initial={{ opacity:0 }} animate={{ opacity:1 }} className="flex items-center justify-center gap-2">
-                      <Check /> Message Sent
-                    </motion.div>
-                  ) : (
-                    <motion.div key="i" initial={{ opacity:0 }} animate={{ opacity:1 }} className="flex items-center justify-center gap-2">
-                      {loading ? <Loader2 className="animate-spin" /> : <><Send size={18} /> Send Message</>}
-                    </motion.div>
+              <div className="space-y-6">
+                <motion.div variants={itemVariants}>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                    Get in touch
+                  </div>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
+                    Let's Build <br/>
+                    <span className="text-muted-foreground font-serif italic font-light">Something.</span>
+                  </h2>
+                  <p className="mt-6 text-muted-foreground text-lg leading-relaxed font-medium">
+                    Ready to turn your vision into reality? Send me a message and let's start building!
+                  </p>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="space-y-4 pt-4">
+                  <ContactDetail icon={Mail} title="Email" content="mohnishgorana1@gmail.com" link="mailto:mohnishgorana1@gmail.com" />
+                  <ContactDetail icon={MapPin} title="Location" content="Neemuch, MP, India" />
+                </motion.div>
+              </div>
+
+              {/* Socials */}
+              <motion.div variants={itemVariants} className="pt-8 border-t border-border/50">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Connect with me</h3>
+                <div className="flex flex-wrap gap-3">
+                  {SOCIAL_LINKS.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial="collapsed"
+                      whileHover="expanded"
+                      className={`group flex items-center p-3 rounded-full bg-secondary/50 border border-border/50 text-muted-foreground transition-all duration-300 ${social.color}`}
+                    >
+                      <social.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                      <motion.span variants={socialTextVariants} className="whitespace-nowrap font-semibold text-sm">
+                        {social.title}
+                      </motion.span>
+                    </motion.a>
+                  ))}
+                </div>
+              </motion.div>
+
+            </div>
+
+            {/* =========================================
+                RIGHT PANEL: The Form
+            ========================================= */}
+            <motion.div variants={itemVariants} className="lg:col-span-7">
+              <form onSubmit={handleSubmit} className="space-y-6 bg-background/50 backdrop-blur-md p-6 sm:p-8 rounded-[2rem] border border-border/50">
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground ml-1">Full Name</label>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      className={inputClasses}
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground ml-1">Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      className={inputClasses}
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground ml-1">Message</label>
+                  <textarea
+                    placeholder="Tell me about your project..."
+                    rows={5}
+                    className={`${inputClasses} resize-none`}
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    required
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={loading || isSuccess}
+                  className={`w-full h-14 rounded-full font-medium text-base transition-all duration-300 shadow-md
+                    ${isSuccess 
+                      ? "bg-emerald-500 text-white border border-emerald-400" 
+                      : "bg-foreground text-background hover:scale-[1.02] active:scale-95"}
+                  `}
+                >
+                  <AnimatePresence mode="wait">
+                    {isSuccess ? (
+                      <motion.div key="success" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="flex items-center justify-center gap-2 cursor-pointer">
+                        <Check size={18} /> Message Sent Successfully
+                      </motion.div>
+                    ) : (
+                      <motion.div key="default" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="flex items-center justify-center gap-2 cursor-pointer">
+                        {loading ? <Loader2 className="animate-spin" size={18} /> : <><Send size={16} /> Send Message</>}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+                
+                {/* Error State */}
+                <AnimatePresence>
+                  {status && !isSuccess && (
+                    <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-sm font-semibold text-center mt-2">
+                      {status}
+                    </motion.p>
                   )}
                 </AnimatePresence>
-              </button>
-              {status && <p className="text-red-500 text-sm font-bold">{status}</p>}
-            </form>
-          </motion.div>
+
+              </form>
+            </motion.div>
+
+          </div>
         </div>
       </motion.div>
     </section>
   );
 };
 
+// 🌟 Reusable Contact Detail Component
 const ContactDetail = ({ icon: Icon, title, content, link }: any) => (
-  <div className="flex items-center gap-4 p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800">
-    <div className="p-3 bg-blue-600/10 text-blue-600"><Icon size={20} /></div>
+  <div className="flex items-center gap-4 p-4 rounded-2xl bg-secondary/30 border border-border/50 group hover:bg-secondary/50 transition-colors">
+    <div className="p-3 rounded-xl bg-background border border-border/50 text-foreground shadow-sm group-hover:scale-105 transition-transform">
+      <Icon size={18} />
+    </div>
     <div>
-      <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">{title}</p>
-      {link ? <a href={link} className="font-bold text-zinc-900 dark:text-zinc-50 hover:text-blue-500 transition-colors">{content}</a> : <p className="font-bold text-zinc-900 dark:text-zinc-50">{content}</p>}
+      <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{title}</p>
+      {link ? (
+        <a href={link} className="font-semibold text-sm text-foreground hover:text-muted-foreground transition-colors line-clamp-1">
+          {content}
+        </a>
+      ) : (
+        <p className="font-semibold text-sm text-foreground line-clamp-1">{content}</p>
+      )}
     </div>
   </div>
 );

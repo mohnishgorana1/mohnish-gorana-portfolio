@@ -3,19 +3,24 @@ import React from "react";
 
 interface CustomIconProps {
   src: string;
-  size?: number;
+  size?: number | string;
+  color?: string; // Color prop add kiya
   className?: string;
 }
 
-const CustomIcon = ({ src, size = 24, className }: CustomIconProps) => {
+const CustomIcon = ({ src, size = 18, className, color }: CustomIconProps) => {
   return (
-    <Image
-      src={src}
-      alt="icon"
-      width={size}
-      height={size}
-      className={className}
-    />
+    <div 
+      className={`relative flex items-center justify-center ${className || ""}`}
+      style={{ width: size, height: size }}
+    >
+      <Image
+        src={src}
+        alt="icon"
+        fill
+        className="object-contain"
+      />
+    </div>
   );
 };
 

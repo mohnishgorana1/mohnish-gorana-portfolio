@@ -1,254 +1,187 @@
-// projects/[projectId]/page.tsx
 "use client";
 
 import { projects, techStacksMap } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+// 🌟 Fixed: Import 'use' from React
+import React, { useState, useEffect, use } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link as LinkIcon } from "lucide-react";
+import { ExternalLink, ChevronRight, Sparkles } from "lucide-react";
 import { BsGithub } from "react-icons/bs";
 
-// Frame definition for initial load speed
-const mainContainerVariants = {
+const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      delayChildren: 0.1,
-      staggerChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { type: "spring", stiffness: 100, damping: 20 } 
+  },
 };
 
-function ProjectDetails({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+// 🌟 Fixed: Unwrap params using React.use()
+function ProjectDetails({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
+  const slug = resolvedParams.slug;
+  
   const currentProject = projects.find((project) => project.slug === slug);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  if (!currentProject) return <div>Project not found</div>;
-
-  const {
-    title,
-    link,
-    images,
-    shortDescription,
-    detailedDescription,
-    techStacks,
-    githubRepositoryUrl,
-    video,
-  } = currentProject;
-
-  // Automatic Carousel Logic (Kept for performance and function)
   useEffect(() => {
-    if (!images || images.length <= 1) return;
-
+    if (!currentProject?.images || currentProject.images.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 2500);
-
+      setCurrentImageIndex((prev) => (prev === currentProject.images.length - 1 ? 0 : prev + 1));
+    }, 4000);
     return () => clearInterval(interval);
-  }, [images]);
+  }, [currentProject?.images]);
+
+  if (!currentProject) return (
+    <div className="h-screen w-full flex items-center justify-center bg-background text-foreground font-bold">
+      Project not found.
+    </div>
+  );
+
+  const { title, link, images, shortDescription, detailedDescription, techStacks, githubRepositoryUrl } = currentProject;
 
   return (
     <motion.main
-      variants={mainContainerVariants}
+      variants={containerVariants}
       initial="hidden"
       animate="visible"
-      // 1. MAIN BACKGROUND: Invert light background to dark
-      className="w-full min-h-[100vh] bg-background flex flex-col items-center gap-y-12 py-12 "
+      className="relative w-full min-h-screen bg-background text-foreground pb-24 selection:bg-primary/30"
     >
-      {/* Header */}
-      <header className="relative pt-12 w-full flex flex-col items-center gap-y-6 text-center">
-        {/* Background Blobs: Adjust colors/opacity for dark mode */}
-        <div className="animate-pulse absolute top- right-1 lg:right-1 w-48 h-48 md:w-96 md:h-96 bg-purple-400 lg:bg-purple-400/50 rounded-full blur-3xl pointer-events-none dark:opacity-30 dark:lg:bg-purple-700/50"></div>
-        <div className="animate-pulse absolute top- left-1 lg:-left-1 w-48 h-48 md:w-96 md:h-96 bg-blue-400 lg:bg-blue-400/50 rounded-full blur-3xl pointer-events-none dark:opacity-30 dark:lg:bg-blue-700/50"></div>
+      {/* --- BACKDROP BLOBS --- */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute top-[20%] -right-[10%] w-[30%] h-[30%] rounded-full bg-secondary/10 blur-[120px]" />
+      </div>
 
-        <motion.h1
-          variants={itemVariants}
-          // Gradient Text: Colors look good on both light/dark
-          className="h-12 md:h-20 text-4xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500"
-        >
-          {title}
-        </motion.h1>
+      <div className="relative px-6 pt-12 sm:pt-20">
+        {/* --- HEADER SECTION --- */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <motion.div variants={itemVariants} className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/50 border border-border text-xs font-bold uppercase tracking-widest text-muted-foreground mb-6">
+            <Sparkles size={14} className="text-yellow-500" /> Case Study
+          </motion.div>
+          
+          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60 leading-[1.1] pb-2">
+            {title}.
+          </motion.h1>
+          
+          <motion.p variants={itemVariants} className="max-w-2xl text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
+            {shortDescription}
+          </motion.p>
+        </div>
 
-        <motion.h2
-          variants={itemVariants}
-          // 2. TEXT COLOR: Adjust description text
-          className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 font-medium"
-        >
-          {shortDescription}
-        </motion.h2>
+        {/* --- MAIN HERO VISUAL (CAROUSEL) --- */}
+        <motion.div variants={itemVariants} className="relative w-full aspect-video rounded-xl overflow-hidden bg-secondary/20 border border-border shadow-2xl mb-20 group">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentImageIndex}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={images[currentImageIndex]}
+                alt={`${title} Preview`}
+                height={1000}
+                width={1000}
+                className="object-cover opacity-90 transition-all duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
+            </motion.div>
+          </AnimatePresence>
 
-        {/* --- Carousel Section --- */}
-        <motion.div
-          variants={itemVariants}
-          transition={{ duration: 0.8 }}
-          className="w-full max-w-4xl mx-auto mt-6"
-        >
-          {/* Container Frame: Adjust shadow and border for dark mode */}
-          <div className="relative w-full aspect-video bg-gray-900 rounded-3xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-2xl dark:shadow-gray-900/80 border border-gray-700/50 dark:border-gray-700">
-            {images && images.length > 0 ? (
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentImageIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: "easeInOut" }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  {/* 1. Background Layer (Blurred & Zoomed) - Dark theme background */}
-                  <div className="absolute inset-0 w-full h-full">
-                    <Image
-                      src={images[currentImageIndex]}
-                      alt={`Background ${title} ${currentImageIndex}`}
-                      fill
-                      className="object-cover blur-2xl opacity-50 brightness-50 scale-110"
-                      priority={currentImageIndex === 0}
-                    />
-                  </div>
+          {/* Progress Markers */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            {images.map((_, idx) => (
+              <div 
+                key={idx} 
+                className={`h-1 transition-all duration-500 rounded-full ${idx === currentImageIndex ? "w-8 bg-foreground" : "w-2 bg-foreground/20"}`} 
+              />
+            ))}
+          </div>
 
-                  {/* 2. Foreground Layer (Clear Image) - No changes needed here */}
-                  <div className="absolute inset-0 w-full h-full flex items-center justify-center p-3 md:p-4">
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={images[currentImageIndex]}
-                        alt={`${title} screenshot ${currentImageIndex + 1}`}
-                        fill
-                        className="object-contain drop-shadow-2xl"
-                        priority={currentImageIndex === 0}
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            ) : (
-              // 3. NO PREVIEW TEXT: Ensure text is visible in dark mode
-              <div className="w-full h-full flex items-center justify-center bg-gray-800 text-gray-400 font-semibold">
-                No Visual Preview Available
-              </div>
-            )}
-
-            {/* Simple Progress Bar */}
-            {images && images.length > 1 && (
-              <div className="absolute bottom-0 left-0 h-0.5 bg-white/10 w-full">
-                <motion.div
-                  key={currentImageIndex}
-                  initial={{ width: "0%" }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 2.5, ease: "linear" }}
-                  className="h-full bg-blue-400"
-                />
-              </div>
-            )}
+          {/* Action Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-background/20 backdrop-blur-[2px] z-10">
+            <Link href={link} target="_blank" className="flex items-center gap-2 bg-foreground text-background px-6 py-3 rounded-full font-bold shadow-xl hover:scale-105 transition-transform">
+              Launch Live App <ExternalLink size={18} />
+            </Link>
           </div>
         </motion.div>
-      </header>
-      {/* --- Links (Enhanced Buttons) --- */}
-      <motion.div
-        variants={itemVariants}
-        className="flex flex-col sm:flex-row gap-4 items-center justify-center"
-      >
-        <motion.a
-          href={githubRepositoryUrl}
-          target="_blank"
-          whileHover={{
-            scale: 1.05,
-            boxShadow:
-              "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-          }}
-          whileTap={{ scale: 0.95 }}
-          // GITHUB BUTTON: Adjust background and shadow for dark mode
-          className="px-6 py-3 rounded-xl bg-gray-800 dark:bg-gray-700 text-white font-semibold flex items-center gap-2 transition duration-200 shadow-md dark:shadow-gray-800/50"
-        >
-          <BsGithub size={20} />
-          Source Code
-        </motion.a>
-        <motion.a
-          href={link}
-          target="_blank"
-          whileHover={{
-            scale: 1.05,
-            // Adjust blue shadow for dark background visibility
-            boxShadow:
-              "0 10px 15px -3px rgba(59, 130, 246, 0.5), 0 4px 6px -2px rgba(59, 130, 246, 0.3)",
-          }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold flex items-center gap-2 transition duration-200 shadow-md"
-        >
-          <LinkIcon size={20} />
-          View Project
-        </motion.a>
-      </motion.div>
-      {/* --- Description (Glassy Effect) --- */}
-      <motion.div
-        variants={itemVariants}
-        // GLASSY DESCRIPTION CARD: Invert colors for dark mode
-        className="w-full max-w-4xl rounded-3xl p-6 transition-shadow duration-500 backdrop-blur-xl 
-        bg-gray-300/80 dark:bg-gray-800/40"
-        style={{ WebkitBackdropFilter: "blur(12px)" }}
-      >
-        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-          Project Overview
-        </h3>
-        <p className="text-gray-500 dark:text-gray-300 text-justify text-base md:text-lg font-medium whitespace-pre-line">
-          {detailedDescription}
-        </p>
-      </motion.div>
-      <div className="w-full max-w-4xl border-t border-gray-300 dark:border-gray-700 my-4" />{" "}
-      {/* Separator adjustment */}
-      {/* --- Technologies Used (Glassy Effect) --- */}
-      <section className="w-full max-w-4xl flex flex-col gap-y-6">
-        <motion.h3
-          variants={itemVariants}
-          className="text-2xl font-bold text-gray-800 dark:text-gray-100"
-        >
-          Technologies Used
-        </motion.h3>
 
-        <motion.div
-          variants={itemVariants}
-          // GLASSY TECH STACK CONTAINER: Invert colors for dark mode
-          className="flex flex-wrap gap-3 p-4 rounded-3xl shadow-lg backdrop-blur-md 
-          bg-white/70 dark:bg-gray-800/70 
-          border border-white/50 dark:border-gray-700/50"
-          style={{ WebkitBackdropFilter: "blur(12px)" }}
-        >
-          {techStacks &&
-            techStacks.map((tech, idx) => {
-              const techData = techStacksMap[tech];
-              if (!techData) return null;
-              const Icon = techData.icon;
-              const color = techData.color;
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+          {/* --- LEFT: DETAILS --- */}
+          <div className="lg:col-span-7 space-y-12">
+            <motion.section variants={itemVariants}>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2 text-foreground">
+                <div className="h-6 w-1 bg-foreground rounded-full" /> Overview
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-line text-justify">
+                {detailedDescription}
+              </p>
+            </motion.section>
 
-              return (
-                // TECH STACK BUTTON: Invert colors for dark mode
-                <button
-                  key={idx}
-                  className="flex items-center justify-center gap-2 
-                  bg-gray-200/90 dark:bg-gray-700/90 
-                  px-4 py-2 rounded-xl shadow-xl hover:shadow-gray-400 dark:hover:shadow-gray-800 duration-300 ease-in cursor-pointer 
-                  border border-gray-300 dark:border-gray-600 
-                  hover:ring-2 hover:ring-gray-400 dark:hover:ring-gray-600 hover:scale-105"
-                >
-                  <Icon size={20} color={color} />
-                  <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">
-                    {tech}
-                  </span>
-                </button>
-              );
-            })}
-        </motion.div>
-      </section>
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+               <Link href={githubRepositoryUrl} target="_blank" className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-secondary border border-border hover:bg-secondary/80 text-foreground font-bold transition-all shadow-sm">
+                <BsGithub size={20} /> Repository
+              </Link>
+              <Link href={link} target="_blank" className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-foreground text-background hover:bg-foreground/90 font-bold transition-all shadow-lg">
+                <ExternalLink size={20} /> Live Preview
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* --- RIGHT: TECH STACK & SPECS --- */}
+          <div className="lg:col-span-5">
+            <motion.div variants={itemVariants} className="sticky top-32 p-8 rounded-[2.5rem] bg-secondary/30 border border-border backdrop-blur-md shadow-sm">
+              <h3 className="text-xl font-bold mb-8 text-foreground">Technical Stack</h3>
+              <div className="flex flex-wrap gap-3">
+                {techStacks.map((tech, idx) => {
+                  const techData = techStacksMap[tech];
+                  if (!techData) return null;
+                  const Icon = techData.icon;
+                  const isBlackIcon = techData.color === "#000000" || techData.color === "#101010";
+
+                  return (
+                    <div key={idx} className="flex items-center gap-2 px-4 py-2 rounded-xl dark:bg-neutral-700 border border-border hover:border-foreground/50 transition-colors group shadow-sm">
+                      <div className={isBlackIcon ? "dark:invert" : ""}>
+                         <Icon size={18} color={isBlackIcon ? undefined : techData.color} />
+                      </div>
+                      <span className="text-sm font-semibold text-foreground/80">{tech}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-border/50">
+                <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-6">Core Features</h4>
+                <ul className="space-y-4">
+                  <li className="flex items-center gap-3 text-sm font-medium text-foreground/70">
+                    <ChevronRight size={16} className="text-foreground" /> Fully Responsive Architecture
+                  </li>
+                  <li className="flex items-center gap-3 text-sm font-medium text-foreground/70">
+                    <ChevronRight size={16} className="text-foreground" /> Optimized Asset Delivery
+                  </li>
+                  <li className="flex items-center gap-3 text-sm font-medium text-foreground/70">
+                    <ChevronRight size={16} className="text-foreground" /> End-to-End Data Flow
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </motion.main>
   );
 }

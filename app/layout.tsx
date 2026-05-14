@@ -107,7 +107,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen max-w-5xl mx-auto px-2 sm:px-0`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen max-w-5xl mx-auto px-2 sm:px-0 selection:bg-neutral-800 selection:text-neutral-200 dark:selection:bg-neutral-50 dark:selection:text-neutral-950`}
       >
         <ThemeProvider
           attribute="class"
@@ -117,7 +117,7 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="sm:px-1 w-full flex flex-col justify-between">
-            <div className="min-h-[80vh] flex-grow">{children}</div>
+            <div className="min-h-[80vh]">{children}</div>
             <footer className="w-full mt-8 self-end">
               <Footer />
             </footer>
