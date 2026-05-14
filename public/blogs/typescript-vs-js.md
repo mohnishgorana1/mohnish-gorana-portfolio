@@ -50,7 +50,7 @@ As someone who has worked extensively with both languages, I find myself consist
 ## Comparing TypeScript and JavaScript in 2026
 
 
-<!-- ![Typescript vs Javascript]("/assets/blogs/js-vs-ts.png", "Typescript vs Javascript") -->
+{/* ![Typescript vs Javascript]("/assets/blogs/js-vs-ts.png", "Typescript vs Javascript") */}
 
 ## Real-World Benefits of TypeScript
 ### Case Study 1: Enterprise Applications
