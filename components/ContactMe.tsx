@@ -93,7 +93,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
         {/* Subtle Background Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-secondary/80 dark:bg-secondary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className={`relative p-6 sm:p-10 md:p-14 rounded-[2.5rem] ${glassClasses}`}>
+        <div className={`relative py-6 px-4 sm:p-10 md:p-14 rounded-[2.5rem] ${glassClasses}`}>
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             
@@ -151,7 +151,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
                 RIGHT PANEL: The Form
             ========================================= */}
             <motion.div variants={itemVariants} className="lg:col-span-7">
-              <form onSubmit={handleSubmit} className="space-y-6 bg-background/50 backdrop-blur-md p-6 sm:p-8 rounded-[2rem] border border-border/50">
+              <form onSubmit={handleSubmit} className="space-y-6 bg-background/50 backdrop-blur-md sm:p-8 rounded-4xl sm:border border-border/50">
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">

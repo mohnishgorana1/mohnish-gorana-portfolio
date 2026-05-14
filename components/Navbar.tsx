@@ -36,7 +36,7 @@ const Navbar = () => {
 
   // THE UNIFORM GLASSMORPHISM CLASSES
   const navContainerClasses = `
-    sticky top-4 z-50 transition-all duration-300 rounded-2xl px-4 py-2 mx-2 sm:mx-0
+    sticky top-4 z-50 transition-all duration-300 rounded-2xl px-4 py-2 mx-1 sm:mx-0
     backdrop-blur-lg border 
     bg-white/70 border-black/10 shadow-lg shadow-black/5
     dark:bg-white/5 dark:border-white/10 dark:shadow-none

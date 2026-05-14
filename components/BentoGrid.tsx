@@ -71,7 +71,7 @@ export default function BentoGridSection() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* HEADER */}
         <div className="mb-16 flex flex-col items-center text-center">
-          <div className="inline-flex items-center px-3 py-1 mb-6 border border-border/50 bg-secondary/30 text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">
+          <div className="inline-flex items-center px-3 py-1 mb-6 border border-border/50 bg-secondary/30 text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest shadow-sm shadow-foreground/20">
             Identity & Focus
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
@@ -158,8 +158,8 @@ export default function BentoGridSection() {
                   Open to Work{" "}
                   <div className="h-2 w-2 rounded-full animate-pulse bg-green-500 mt-0.5"></div>
                 </h3>
-                <p className="text-[10px] text-muted-foreground font-semibold mt-1 uppercase tracking-widest pl-4">
-                  * Full-Time <br />* Remote
+                <p className="text-[10px] text-muted-foreground font-semibold mt-1 uppercase tracking-widest pl-2">
+                  • Full-Time <br />• Remote
                 </p>
               </div>
             </BentoCard>
@@ -174,12 +174,13 @@ export default function BentoGridSection() {
                   Off-Grid
                 </span>
               </div>
-              <div className="mt-auto w-full flex flex-col ">
-                <h3 className="text-xl font-black text-foreground tracking-tight leading-tight">
-                  Field Focus.
+               <div className="mt-auto">
+                <h3 className="text-lg flex items-center gap-2 font-bold text-foreground">
+                  Field Focus
+                  <div className="h-2 w-2 rounded-full animate-pulse bg-green-500 mt-0.5"></div>
                 </h3>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mt-2">
-                  • Cricket 🏏 <br /> • Farming 🌾
+                <p className="text-[10px] text-muted-foreground font-semibold mt-1 uppercase tracking-widest pl-2">
+                 • Cricket 🏏 <br /> • Farming 🌾
                 </p>
               </div>
             </BentoCard>
@@ -200,7 +201,7 @@ export default function BentoGridSection() {
                     MCA Graduate
                   </span>
                   <span className="text-xs font-mono text-muted-foreground uppercase">
-                    Post Grad
+                    PG
                   </span>
                 </div>
                 <div className="flex items-end justify-between border-b border-border/50 pb-2">
@@ -208,7 +209,7 @@ export default function BentoGridSection() {
                     B.Sc Computer Science
                   </span>
                   <span className="text-xs font-mono text-muted-foreground uppercase">
-                    Undergrad
+                    UG
                   </span>
                 </div>
               </div>
