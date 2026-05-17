@@ -18,6 +18,7 @@ import {
   SiNodedotjs,
   SiExpress,
   SiClerk,
+  SiCloudinary,
 } from "react-icons/si";
 import { TbBrandThreejs, TbBrandSocketIo } from "react-icons/tb";
 import { imgIcon } from "@/helpers/icon";
@@ -34,6 +35,7 @@ export const techStacksMap: any = {
   FramerMotion: { icon: SiFramer, color: "#9147c9" },
   SocketIO: { icon: TbBrandSocketIo, color: "#9147c9" },
   Pusher: { icon: SiPusher, color: "#5B00BA" },
+  Cloudinary: { icon: SiCloudinary, color: "#3448C5" },
   Stream: {
     icon: imgIcon("/assets/icons/stream.png"),
     color: "#0000FF",
@@ -55,6 +57,43 @@ export const techStacksMap: any = {
 export const projects = [
   {
     id: "1",
+    title: "Mega Drive",
+    slug: "megadrive",
+    link: "https://mdrive-mg.vercel.app/",
+    isFeatured: true,
+    images: ["/assets/projects/mega-drive.png"],
+    shortVideo: "",
+    shortDescription:
+      "A full-stack, production-ready cloud storage SaaS engineered to replicate a native operating system file explorer in the browser.",
+    description:
+      "MDrive is a native-feeling cloud storage application featuring a deeply nested folder architecture, real-time capacity tracking, and secure token-based public sharing. Built with Next.js 14 and MongoDB, it natively bypasses serverless payload constraints via direct client-to-cloud asset streaming.",
+    detailedDescription:
+      "### ☁️ Overview\n" +
+      "MDrive bridges the gap between native desktop environments and web-based file management. It provides a highly responsive UI with comprehensive support for deep file tree operations, avoiding typical platform limitations like serverless execution timeouts and structural bottlenecks.\n\n" +
+      "### ✨ Core Features\n" +
+      "* **Direct-to-Cloud Uploads:** Bypasses Vercel&apos;s 4.5MB serverless payload cap by handling unsigned client-side streaming straight to Cloudinary, tracking file data via automated post-upload DB syncing.\n" +
+      "* **Advanced File System Logic:** Full support for Cut, Copy, and Paste operations across deeply nested systems with built-in cyclic prevention (`isDestInsideSource`).\n" +
+      "* **Secure Public Sharing:** Generates unguessable URL access tokens built over the Edge-compatible Web Crypto API with instant visibility toggles.\n" +
+      "* **Bulk Operations & Global Search:** Offers batch-deletions, batch-moving, and debounced custom APIs to control server load and eradicate the Thundering Herd issue.\n" +
+      "* **Cloud Pulse Tracker:** A dynamic, dashboard capacity monitor that mirrors storage expansions and reductions in real-time.\n\n" +
+      "### 🧠 Engineering Challenges Solved\n" +
+      "1. **The Serverless Cap:** Avoided HTTP 413 errors completely by shifting processing architecture to client-side direct presets.\n" +
+      "2. **Infinite Recursion Loops:** Eliminated server-crashing directory loops (e.g., pasting Folder A into Folder A) using an optimized recursive tree-checking condition.\n" +
+      "3. **MongoDB Null Trap:** Resolved `E11000 Duplicate Key` errors on unique sparse indices during access revocation by engineering updates with the `$unset` operator instead of resetting to null.",
+    githubRepositoryUrl: "https://github.com/mohnishgorana1/mega-drive",
+    techStacks: [
+      "NextJS",
+      "Typescript",
+      "TailwindCSS",
+      "MongoDB",
+      "Clerk",
+      "Stream",
+      "FramerMotion",
+      "Cloudinary",
+    ],
+  },
+  {
+    id: "2",
     title: "CodeConnect",
     slug: "codeconnect",
     link: "https://code-connect-v1.vercel.app/",
@@ -87,7 +126,7 @@ export const projects = [
     ],
   },
   {
-    id: "2",
+    id: "3",
     title: "Examify",
     slug: "examify",
     link: "https://examify-three.vercel.app/",
@@ -122,7 +161,7 @@ export const projects = [
     ],
   },
   {
-    id: "3",
+    id: "4",
     title: "DocStream",
     slug: "docstream",
     isFeatured: true,
@@ -142,7 +181,7 @@ export const projects = [
     techStacks: ["NextJS", "Typescript", "TailwindCSS", "Liveblocks"],
   },
   {
-    id: "4",
+    id: "5",
     title: "Realtime Chat App",
     slug: "realtime-chatapp",
     link: "https://realtime-chat-application-mg.vercel.app",
@@ -174,7 +213,7 @@ export const projects = [
     ],
   },
   {
-    id: "5",
+    id: "6",
     title: "Career Hub",
     slug: "careerhub",
     isFeatured: false,
@@ -200,7 +239,7 @@ export const projects = [
     ],
   },
   {
-    id: "6",
+    id: "7",
     title: "Carewell",
     slug: "carewell",
     link: "https://carewell-eight.vercel.app/",
@@ -219,7 +258,7 @@ export const projects = [
     techStacks: ["NextJS", "Typescript", "TailwindCSS"],
   },
   {
-    id: "7",
+    id: "8",
     title: "Ignite LMS",
     slug: "ignite-lms",
     isFeatured: false,
@@ -244,33 +283,6 @@ export const projects = [
       "TailwindCSS",
     ],
   },
-  {
-    id: "8",
-
-    title: "Mega Drive",
-    slug: "megadrive",
-    link: "https://mega-drive-nine.vercel.app/",
-    isFeatured: false,
-    // thumbnail: "/assets/projects/mega-drive.png",
-    images: ["/assets/projects/mega-drive.png"],
-    shortVideo: "",
-
-    description:
-      "A secure and scalable cloud-based file storage platform that allows users to upload, organize, and access their files from anywhere.",
-    shortDescription: "A cloud-based file storage and management platform.",
-    detailedDescription:
-      "Mega Drive is a secure and scalable cloud-based file storage platform designed to help users manage their files efficiently. It supports multi-format file uploads, advanced folder organization, and tagging systems, allowing users to keep their files neatly organized and easily accessible from any device. With remote access capabilities, users can collaborate on files, share folders with other users, and manage permissions for enhanced security. Mega Drive is built with scalability in mind, ensuring it can accommodate both individual users and large teams. Its intuitive design simplifies file management, while offering robust data protection and security.",
-    githubRepositoryUrl: "https://github.com/mohnishgorana1/mega-drive",
-    techStacks: [
-      "NextJS",
-      "Typescript",
-      "MongoDB",
-      "ExpressJS",
-      "NodeJS",
-      "TailwindCSS",
-    ],
-  },
-
   {
     id: "9",
 
@@ -430,17 +442,20 @@ export const machineCodingTaskConfigs = [
 ];
 
 export const designShowcaseConfigs = [
-  { 
-    name: "SPATIAL STACKED CAROUSEL", 
+  {
+    name: "SPATIAL STACKED CAROUSEL",
     path: "spatial-stacked-carousel",
-    description: "Horizontal scrolling cards with subtle glowing gradients and category filters.",
-    inspiration: "Raycast" 
+    description:
+      "Horizontal scrolling cards with subtle glowing gradients and category filters.",
+    inspiration: "Raycast",
   },
-  // Future designs aap yahan add karte jaana:
-  // { name: "LINEAR NAVBAR", path: "linear-navbar", ... }
-  // { name: "VERCEL FOOTER", path: "vercel-footer", ... }
+  {
+    name: "BENTO GRID",
+    path: "bento-grid",
+    description: "Bento Grid Design",
+    inspiration: "harness.io",
+  },
 ];
-
 
 export interface Blog {
   id: number;
