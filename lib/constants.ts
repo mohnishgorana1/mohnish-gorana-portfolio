@@ -12,12 +12,10 @@ import {
   SiTypescript,
   SiMongodb,
   SiReact,
-  SiGreensock,
   SiFramer,
   SiPusher,
   SiNodedotjs,
   SiExpress,
-  SiClerk,
   SiCloudinary,
 } from "react-icons/si";
 import { TbBrandThreejs, TbBrandSocketIo } from "react-icons/tb";
@@ -454,6 +452,13 @@ export const designShowcaseConfigs = [
     path: "bento-grid",
     description: "Bento Grid Design",
     inspiration: "harness.io",
+  },
+  {
+    name: "MACBOOK DOCK",
+    path: "macbook-dock",
+    description:
+      "A physics-based magnification dock tracking real-time cursor proximity with fluid spring transitions.",
+    inspiration: "Apple",
   },
 ];
 
