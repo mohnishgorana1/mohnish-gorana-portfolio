@@ -460,6 +460,13 @@ export const designShowcaseConfigs = [
       "A physics-based magnification dock tracking real-time cursor proximity with fluid spring transitions.",
     inspiration: "Apple",
   },
+  {
+    name: "LIFECYCLE TRACKER",
+    path: "lifecycle-tracker",
+    description:
+      "",
+    inspiration: "",
+  },
 ];
 
 export interface Blog {
