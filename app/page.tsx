@@ -12,14 +12,14 @@ export default function Home() {
       <section className="">
         <HeroSection />
       </section>
+      <section id="github" className="">
+        <GithubActivitySection />
+      </section>
       <section id="stats" className="">
         <BentoGridSection />
       </section>
       <section className="flex flex-col my-auto mx-auto h-auto ">
         <ProjectsSection isHome={true} />
-      </section>
-      <section id="github" className="">
-        <GithubActivitySection />
       </section>
       <section id="about" className="">
         <AboutSection />

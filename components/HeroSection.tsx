@@ -46,7 +46,7 @@ export default function HeroSection() {
   `;
 
   return (
-    <section className="relative w-full min-h-[70vh] md:min-h-[85vh]  flex items-center justify-center pb-12 overflow-hidden">
+    <section className="relative w-full  md:min-h-[85vh] flex md:items-center justify-center  overflow-hidden">
 
       {/* Abstract Cinematic Background Glows */}
       {/* <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-500/15 dark:bg-blue-500/10 rounded-full blur-[100px] md:blur-[120px] pointer-events-none -z-10" />
