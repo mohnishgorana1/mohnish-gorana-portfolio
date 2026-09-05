@@ -82,18 +82,18 @@ const ThemeToggle = () => {
     <button
       ref={buttonRef}
       onClick={toggleThemeWithTransition}
-      className="p-0 rounded-lg transition-all duration-300 w-8 h-8 flex items-center justify-center
+      className="cursor-pointer p-0 rounded-lg transition-all duration-300 w-1/2 h-1/2 flex items-center justify-center
                    bg-gray-200 text-gray-700 hover:bg-gray-300 
                    dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
       aria-label="Toggle theme"
     >
       <Moon 
-        className={`h-5 w-5 absolute transition-all duration-500 ${
+        className={` absolute transition-all duration-500 ${
           isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
         }`}
       />
       <Sun 
-        className={`h-5 w-5 absolute transition-all duration-500 ${
+        className={` absolute transition-all duration-500 ${
           isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
         }`}
       />

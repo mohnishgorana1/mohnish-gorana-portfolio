@@ -1,5 +1,5 @@
 'use client'
-
+import { AnimatePresence, motion } from 'motion/react'
 import { cn } from "@/lib/utils";
 import { CircleCheck, Dot, Loader2, Play } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -80,14 +80,20 @@ function Component() {
 
     const progressWidth = `${((currentStepIndex + 1) / SANDBOX_EXECUTION_DATA.steps.length) * 100}%`;
 
+    // Dynamically find when the terminal should open
+    const terminalTriggerIndex = SANDBOX_EXECUTION_DATA.steps.findIndex(s => s.hasLogs);
+    const showTerminal = terminalTriggerIndex !== -1 && currentStepIndex >= terminalTriggerIndex;
+
     return (
-        <div className={cn(
-            "min-h-112.5 w-full max-w-md rounded-4xl px-4 py-6 flex flex-col justify-between gap-y-4 shadow-lg",
-            "bg-neutral-50 dark:bg-neutral-950",
-            "shadow-neutral-200 dark:shadow-neutral-900/50",
-            "border border-neutral-200 dark:border-neutral-800"
-        )}>
-            <header className="px-2 flex items-center justify-between">
+        <motion.div
+            layout
+            className={cn(
+                "min-h-112.5 w-full max-w-md rounded-4xl px-4 py-6 flex flex-col justify-between gap-y-4 shadow-lg",
+                "bg-neutral-50 dark:bg-neutral-950",
+                "shadow-neutral-200 dark:shadow-neutral-900/50",
+                "border border-neutral-200 dark:border-neutral-800"
+            )}>
+            <motion.header layout className="px-2 flex items-center justify-between">
                 <div className="flex items-center gap-4 py-2">
                     <h3 className="font-bold tracking-wide text-neutral-900 dark:text-neutral-100">
                         Sandbox
@@ -95,11 +101,13 @@ function Component() {
                     <span className="text-xs font-medium px-2 py-1 rounded-4xl bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300">
                         {SANDBOX_EXECUTION_DATA.nodeVersion}
                     </span>
-                    {isWarm && (
-                        <span className="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded">
-                            WARM
-                        </span>
-                    )}
+                    <AnimatePresence>
+                        {isWarm && (
+                            <span className="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded">
+                                WARM
+                            </span>
+                        )}
+                    </AnimatePresence>
                 </div>
                 <div className={cn(
                     "font-medium flex items-center justify-center gap-0.5",
@@ -107,27 +115,31 @@ function Component() {
                     status === "Running" && "text-blue-600 dark:text-blue-500",
                     status === "Done" && "text-emerald-600 dark:text-emerald-500"
                 )}>
-                    <span>{status}</span>
+                    <motion.span layout> {status}</motion.span>
                     <Dot className="animate-pulse" />
                 </div>
-            </header>
+            </motion.header>
 
-            <div className="px-2 w-full">
+            <motion.div layout className="px-2 w-full">
                 <div className="w-full rounded-full h-1 overflow-hidden bg-neutral-200 dark:bg-neutral-800">
-                    <div
-                        className="bg-green-500 dark:bg-green-600 h-full transition-all duration-300 ease-out"
-                        style={{ width: status === "Done" ? "100%" : progressWidth }}
+                    <motion.div
+
+                        className="bg-green-500 dark:bg-green-600 h-full"
+                        initial={{ width: "0%" }}
+                        animate={{ width: status === "Done" ? "100%" : progressWidth }}
+                        transition={{ ease: "circOut", duration: 0.4 }}
                     />
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl py-4 px-1 flex flex-col gap-y-2 bg-neutral-100 dark:bg-neutral-900/50 border border-neutral-200/60 dark:border-neutral-800">
+            <motion.div className="rounded-2xl py-4 px-1 flex flex-col gap-y-2 bg-neutral-100 dark:bg-neutral-900/50 border border-neutral-200/60 dark:border-neutral-800">
                 {SANDBOX_EXECUTION_DATA.steps.map((step, index) => {
                     const state = stepStates[index];
                     const displayDuration = (isWarm && step.isCachedOnWarm) ? (step.durationWarm ?? step.durationCold) : step.durationCold;
 
                     return (
-                        <div
+                        <motion.div
+                            layout
                             key={step.id}
                             className={cn(
                                 "flex items-center justify-between px-3 py-2 rounded-lg transition-all",
@@ -152,51 +164,77 @@ function Component() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                                {isWarm && step.isCachedOnWarm && state === "completed" && (
-                                    <span className="text-[10px] font-bold px-1 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400">
-                                        cached
-                                    </span>
-                                )}
+                                <AnimatePresence>
+                                    {isWarm && step.isCachedOnWarm && state === "completed" && (
+                                        <span className="text-[10px] font-bold px-1 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400">
+                                            cached
+                                        </span>
+                                    )}
+                                </AnimatePresence>
                                 <p className="text-xs font-mono text-neutral-500 dark:text-neutral-400">
                                     {state === "completed" ? `${displayDuration}ms` : state === "running" ? "running" : ""}
                                 </p>
                             </div>
-                        </div>
+                        </motion.div>
                     )
                 })}
-            </div>
+            </motion.div>
 
-            <div className={cn(
-                "p-4 font-mono text-xs rounded-xl transition-all border",
-                "bg-neutral-900 text-neutral-200 border-neutral-800",
-                currentStepIndex >= 4 ? "opacity-100" : "opacity-0 h-0 p-0 overflow-hidden border-none"
-            )}>
-                {SANDBOX_EXECUTION_DATA.terminalLogs.map((line, idx) => (
-                    <p key={idx} className={cn(
-                        "py-0.5",
-                        line.startsWith("✓") && "text-emerald-400",
-                        line.startsWith("$") && "text-neutral-400"
-                    )}>
-                        {line}
-                    </p>
-                ))}
-            </div>
+            {/* terminal */}
+            <AnimatePresence>
+                {
+                    showTerminal && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="p-4 font-mono text-xs rounded-xl border bg-neutral-900 text-neutral-200 border-neutral-800">
+                                {SANDBOX_EXECUTION_DATA.terminalLogs.map((line, idx) => (
+                                    <motion.p
+                                        key={idx}
+                                        initial={{ opacity: 0, x: -5 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: idx * 0.15 }}
+                                        className={cn(
+                                            "py-0.5",
+                                            line.startsWith("✓") && "text-emerald-400",
+                                            line.startsWith("$") && "text-neutral-400",
+                                            line.startsWith(">") && "text-blue-400"
+                                        )}
+                                    >
+                                        {line}
+                                    </motion.p>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence>
 
-            <footer className="flex items-center justify-between text-xs mt-2 px-2 text-neutral-500 dark:text-neutral-400">
-                <span>
+            <motion.footer layout className="flex items-center justify-between text-xs mt-2 px-2 text-neutral-500 dark:text-neutral-400">
+                <motion.span layout>
                     {status === "Done" ? `Finished in ${isWarm ? "1.23s" : "4.51s"}` : "Executing pipeline..."}
-                </span>
-                {status === "Done" && (
-                    <button
-                        onClick={() => runSimulation(!isWarm)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all cursor-pointer shadow-sm hover:opacity-90 active:scale-95 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
-                    >
-                        <Play className="w-3 h-3 fill-current" />
-                        <span>Re-run ({isWarm ? "cold" : "warm"})</span>
-                    </button>
-                )}
-            </footer>
-        </div>
+                </motion.span>
+                <AnimatePresence>
+                    {status === "Done" && (
+                        <motion.button
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => runSimulation(!isWarm)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-colors cursor-pointer shadow-sm bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                        >
+                            <Play className="w-3 h-3 fill-current" />
+                            <span>Re-run ({isWarm ? "cold" : "warm"})</span>
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+            </motion.footer>
+        </motion.div>
     )
 }
 

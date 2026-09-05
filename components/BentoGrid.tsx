@@ -81,7 +81,7 @@ export default function BentoGridSection() {
             </span>
           </h2>
         </div>
-        
+
         {/* THE GRID */}
 
         <motion.div
@@ -120,25 +120,23 @@ export default function BentoGridSection() {
             </BentoCard>
           </div>
 
-          {/* 2. PROJECT SPOTLIGHT: MDRIVE (2 Columns) */}
+          {/* 2. PROJECT SPOTLIGHT: 2 Columns) */}
           <div className="md:col-span-2">
             <BentoCard>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Database size={14} />
+                  <Zap size={14} className="text-blue-500" />
                   <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                    02 / Current Build
+                    02 / Current Focus
                   </span>
                 </div>
-                <Zap size={14} className="text-amber-500" />
               </div>
               <div className="mt-auto">
-                <h3 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight mb-2">
-                  MDrive
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-2">
+                  GenAI & Agent Workflows
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  Developing a secure, high-performance cloud storage platform
-                  focused on seamless file management.
+                  Exploring Retrieval-Augmented Generation (RAG) and integrating LLMs into full-stack platforms.
                 </p>
               </div>
             </BentoCard>
@@ -174,13 +172,13 @@ export default function BentoGridSection() {
                   Off-Grid
                 </span>
               </div>
-               <div className="mt-auto">
+              <div className="mt-auto">
                 <h3 className="text-lg flex items-center gap-2 font-bold text-foreground">
                   Field Focus
                   <div className="h-2 w-2 rounded-full animate-pulse bg-green-500 mt-0.5"></div>
                 </h3>
                 <p className="text-[10px] text-muted-foreground font-semibold mt-1 uppercase tracking-widest pl-2">
-                 • Cricket 🏏 <br /> • Farming 🌾
+                  • Cricket 🏏 <br /> • Farming 🌾
                 </p>
               </div>
             </BentoCard>

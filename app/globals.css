@@ -2,26 +2,21 @@
 
 @theme {
   /* 🎨 Core Colors (Light Mode) */
-  --color-background: var(--color-neutral-50); /* Light mode me pure white background standard hai */
+  --color-background: var(--color-neutral-50);
   --color-foreground: var(--color-neutral-950);
-
   --color-primary: var(--color-neutral-950);
   --color-primary-foreground: var(--color-white);
-
   --color-secondary: var(--color-neutral-200);
   --color-secondary-foreground: var(--color-neutral-800);
-
   --color-muted: var(--color-neutral-100);
   --color-muted-foreground: var(--color-neutral-500);
-
   --color-accent: var(--color-blue-600);
   --color-border: var(--color-neutral-200);
 
-  /* 🟢 Lifecycle Status Colors (Adding explicitly for v4 safety) */
   --color-success: var(--color-emerald-500);
   --color-warning: var(--color-amber-500);
 
-  /* 📏 Border Radius (Added 4xl support) */
+  /* 📏 Border Radius */
   --radius-4xl: 2rem;
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
@@ -48,19 +43,14 @@
   .dark {
     --color-background: var(--color-black);
     --color-foreground: var(--color-neutral-50);
-
     --color-primary: var(--color-white);
     --color-primary-foreground: var(--color-neutral-950);
-
     --color-secondary: var(--color-neutral-900);
     --color-secondary-foreground: var(--color-neutral-300);
-
     --color-muted: var(--color-neutral-900);
     --color-muted-foreground: var(--color-neutral-400);
-
     --color-accent: var(--color-blue-500);
     --color-border: var(--color-neutral-800);
-    
     --color-success: var(--color-emerald-400);
     --color-warning: var(--color-amber-400);
   }

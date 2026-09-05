@@ -1,3 +1,5 @@
+// /lib/constant.ts
+
 import {
   Globe,
   Server,
@@ -463,6 +465,13 @@ export const designShowcaseConfigs = [
   {
     name: "LIFECYCLE TRACKER",
     path: "lifecycle-tracker",
+    description:
+      "",
+    inspiration: "",
+  },
+  {
+    name: "ANIMATED STEPPER FORM",
+    path: "animated-stepper-form",
     description:
       "",
     inspiration: "",

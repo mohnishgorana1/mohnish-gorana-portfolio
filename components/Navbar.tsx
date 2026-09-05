@@ -1,140 +1,228 @@
 "use client";
-import { motion } from "motion/react";
-import { useState } from "react";
+
+import { motion, useMotionValue, useSpring, useTransform, MotionValue, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Code, Menu, NotebookText, Palette, X } from "lucide-react";
+import { Home, Code, Menu, NotebookText, Palette, Terminal, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
-import { FiFramer } from "react-icons/fi";
 
+// 1. Navigation Data
 const navItems = [
-  { name: "Projects", href: "/projects", icon: Code },
-  { name: "Blogs", href: "/blogs", icon: NotebookText },
-  { name: "CodingTasks", href: "/machine-coding-tasks", icon: Code },
-  { name: "Designs", href: "/design", icon: Palette },
-
+  { name: "Home", href: "/", icon: <Home className="w-1/2 h-1/2" /> },
+  { name: "Projects", href: "/projects", icon: <Code className="w-1/2 h-1/2" /> },
+  { name: "Blogs", href: "/blogs", icon: <NotebookText className="w-1/2 h-1/2" /> },
+  { name: "Coding", href: "/machine-coding-tasks", icon: <Terminal className="w-1/2 h-1/2" /> },
+  { name: "Designs", href: "/design", icon: <Palette className="w-1/2 h-1/2" /> },
 ];
 
 const socialLinks = [
-  {
-    name: "GitHub",
-    href: "https://github.com/mohnishgorana1",
-    icon: BsGithub,
-    isExternal: true,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/mohnish-gorana/",
-    icon: BsLinkedin,
-    isExternal: true,
-  },
+  { name: "GitHub", href: "https://github.com/mohnishgorana1", icon: <BsGithub className="w-1/2 h-1/2" />, isExternal: true },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/mohnish-gorana-804374340/", icon: <BsLinkedin className="w-1/2 h-1/2" />, isExternal: true },
 ];
 
+// 2. The Interactive Dock Icon Component
+interface DockIconProps {
+  icon: React.ReactNode;
+  label: string;
+  href?: string;
+  isExternal?: boolean;
+  mouseX: MotionValue;
+  onClick?: () => void;
+}
+
+function DockIcon({ icon, label, href, isExternal, mouseX, onClick }: DockIconProps) {
+  let ref = useRef<HTMLDivElement>(null);
+
+  let distance = useTransform(mouseX, (val) => {
+    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
+    return val - bounds.x - bounds.width / 2;
+  });
+
+  const widthTransform = useTransform(distance, [-50, 0, 50], [40, 50, 40]);
+
+  const width = useSpring(widthTransform, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12
+  });
+
+  const content = (
+    <>
+      <span className="absolute top-full mt-1 scale-0 group-hover:scale-100 transition-all duration-200 rounded-lg bg-foreground px-3 py-1.5 text-xs font-semibold text-background whitespace-nowrap shadow-xl z-50 pointer-events-none origin-top">
+        {label}
+      </span>
+      <div className="flex w-full h-full items-center justify-center text-muted-foreground group-hover:text-foreground dark:hover:text-white transition-colors duration-300">
+        {icon}
+      </div>
+    </>
+  );
+
+  const className = "relative group aspect-square rounded-full bg-secondary dark:bg-white/10 border border-border hover:bg-secondary/60 flex items-center justify-center cursor-pointer shrink-0 duration-300 transition-colors";
+
+  if (href) {
+    return (
+      <motion.div ref={ref} style={{ width }} className={className}>
+        <Link
+          href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="w-full h-full flex items-center justify-center"
+        >
+          {content}
+        </Link>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div ref={ref} style={{ width }} onClick={onClick} className={className}>
+      {content}
+    </motion.div>
+  );
+}
+
+
+// 3. Main Navbar Component
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [hovered, setHovered] = useState<number | null>(null);
+  const mouseX = useMotionValue(Infinity);
 
-  // THE UNIFORM GLASSMORPHISM CLASSES
+  // Scroll lock effect when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const navContainerClasses = `
-    sticky top-4 z-50 transition-all duration-300 rounded-2xl px-4 py-2 mx-1 sm:mx-0
-    backdrop-blur-lg border 
-    bg-white/70 border-black/10 shadow-lg shadow-black/5
-    dark:bg-white/5 dark:border-white/10 dark:shadow-none
+    rounded-full px-3 py-2
+    backdrop-blur-xl border 
+    bg-white/60 border-neutral-200/50 shadow-2xl shadow-black/5
+    dark:bg-neutral-950/60 dark:border-white/10 dark:shadow-xs dark:shadow-white/10
   `;
 
   return (
-    <nav className={navContainerClasses}>
-      <div className="flex justify-between items-center">
-        {/* Logo Area */}
-        <Link
-          href="/"
-          className="group relative text-xl sm:text-2xl font-extrabold text-foreground transition-colors flex gap-x-1"
-        >
-          <span>Mohnish Gorana</span>
-          <span className="text-primary">.</span>
-        </Link>
+    <main className="flex mt-4 h-16 w-full mx-auto flex-col items-center justify-center z-50">
 
-        {/* Desktop Links */}
-        <section className="hidden md:flex items-center space-x-2 lg:space-x-4">
-          <div className="flex items-center">
-            {navItems.map((item, idx) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onMouseEnter={() => setHovered(idx)}
-                onMouseLeave={() => setHovered(null)}
-                className="px-4 py-2 text-sm font-medium duration-300 ease-in-out text-muted-foreground hover:text-foreground relative group rounded-full"
-              >
-                {hovered === idx && (
-                  <motion.div
-                    layoutId="hover"
-                    className="absolute inset-0 rounded-full w-full h-full bg-secondary"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  ></motion.div>
-                )}
-                <motion.span className="relative z-10">{item.name}</motion.span>
-              </Link>
-            ))}
-          </div>
+      {/* ======================================= */}
+      {/* Desktop Apple Dock (Hidden on Mobile) */}
+      {/* ======================================= */}
+      <motion.nav
+        onMouseMove={(e) => mouseX.set(e.pageX)}
+        onMouseLeave={() => mouseX.set(Infinity)}
+        className={`hidden md:flex items-center gap-2 ${navContainerClasses}`}
+      >
+        {navItems.map((item, idx) => (
+          <DockIcon key={idx} icon={item.icon} label={item.name} href={item.href} mouseX={mouseX} />
+        ))}
 
-          {/* Social Icons (Monochrome for uniform design) */}
-          <div className="flex items-center space-x-2">
-            {socialLinks.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  target={item.isExternal ? "_blank" : undefined}
-                  rel={item.isExternal ? "noopener noreferrer" : undefined}
-                  title={item.name}
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                >
-                  <Icon size={18} className="hover:scale-105 transition-transform" />
-                </Link>
-              );
-            })}
-          </div>
-          
-          <div className="pl-2 border-l border-border">
-             <ThemeToggle />
-          </div>
-        </section>
+        <div className="w-px h-8 bg-border mx-1" />
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center gap-2">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg text-foreground hover:bg-secondary transition-colors"
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+        {socialLinks.map((item, idx) => (
+          <DockIcon key={idx} icon={item.icon} label={item.name} href={item.href} isExternal={item.isExternal} mouseX={mouseX} />
+        ))}
+
+        <div className="w-px h-8 bg-border mx-1" />
+
+        <DockIcon
+          icon={<div className="scale-75"><ThemeToggle /></div>}
+          label="Theme"
+          mouseX={mouseX}
+        />
+      </motion.nav>
+
+      {/* ======================================= */}
+      {/* Mobile Menu Navbar (Visible on Mobile) */}
+      {/* ======================================= */}
+      {/* Added 'relative z-50' so it stays above the blur overlay */}
+      <nav className={`md:hidden relative z-50 flex items-center justify-between gap-3 ${navContainerClasses} px-4`}>
+
+        <div className="flex items-center gap-3">
+          <Link href="/" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+            <Home size={20} />
+          </Link>
+          <Link href="/projects" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+            <Code size={20} />
+          </Link>
         </div>
-      </div>
 
-      {/* Mobile Dropdown */}
-      {isOpen && (
-        <aside className="md:hidden absolute w-full left-0 mt-4 z-40 bg-background border border-border shadow-xl rounded-2xl overflow-hidden">
-          <div className="flex flex-col p-4 space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="py-3 px-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg flex items-center gap-3 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Icon className="h-5 w-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-        </aside>
-      )}
-    </nav>
+        <div className="w-px h-5 bg-border/80" />
+
+        <div className="flex items-center gap-3">
+          <Link href="https://github.com/mohnishgorana1" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+            <BsGithub size={18} />
+          </Link>
+          <Link href="https://www.linkedin.com/in/mohnish-gorana-804374340/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+            <BsLinkedin size={18} />
+          </Link>
+        </div>
+
+        <div className="w-px h-5 bg-border/80" />
+
+        <div className="flex items-center mx-2">
+          <ThemeToggle />
+        </div>
+
+        <div className="w-px h-5 bg-border/80 " />
+
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-foreground hover:text-muted-foreground transition-colors flex items-center justify-center p-1"
+        >
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </nav>
+
+      {/* ======================================= */}
+      {/* Mobile Dropdown Menu & Blur Overlay */}
+      {/* ======================================= */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* The Blur Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsOpen(false)}
+              className="md:hidden fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
+            />
+
+            {/* The Dropdown Menu */}
+            {/* Changed z-40 to z-50 to stay above the backdrop */}
+            <motion.aside
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden absolute top-16 left-4 right-4 z-50 bg-background/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl overflow-hidden"
+            >
+              <div className="flex flex-col p-3 space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="py-3 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-2xl flex items-center gap-4 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+    </main>
   );
 };
 
