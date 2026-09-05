@@ -2,7 +2,7 @@
 
 import * as React from "react";
 // Ensure you are importing all necessary React hooks explicitly if not using the React. prefix
-import { useRef, useState, useEffect, useCallback } from "react"; 
+import { useRef, useState, useEffect, useCallback } from "react";
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -12,15 +12,15 @@ const ThemeToggle = () => {
   // HOOKS MUST BE CALLED UNCONDITIONALLY AT THE TOP LEVEL
   const { setTheme, theme, resolvedTheme } = useTheme();
   // We explicitly use useState and useEffect imports here:
-  const [mounted, setMounted] = useState(false); 
-  const buttonRef = useRef<HTMLButtonElement>(null); 
+  const [mounted, setMounted] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-      setMounted(true);
-      // Clean up the ref when unmounting, although usually not strictly necessary for simple refs
-      return () => {
-        // Any necessary cleanup
-      };
+    setMounted(true);
+    // Clean up the ref when unmounting, although usually not strictly necessary for simple refs
+    return () => {
+      // Any necessary cleanup
+    };
   }, []);
 
   // Use resolvedTheme (light/dark) to determine the current state
@@ -49,7 +49,7 @@ const ThemeToggle = () => {
     const { top, left, width, height } = buttonRef.current.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;
-    
+
     // Calculate the maximum distance from the button center to any corner of the viewport
     const maxRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
@@ -72,10 +72,10 @@ const ThemeToggle = () => {
     );
   }, [isDark, setTheme]); // Added dependencies
 
-  
+
   if (!mounted) {
     // Return a simple placeholder when not mounted
-    return <div className="w-8 h-8" />; 
+    return <div className="w-8 h-8" />;
   }
 
   return (
@@ -83,19 +83,16 @@ const ThemeToggle = () => {
       ref={buttonRef}
       onClick={toggleThemeWithTransition}
       className="cursor-pointer p-0 rounded-lg transition-all duration-300 w-1/2 h-1/2 flex items-center justify-center
-                   bg-gray-200 text-gray-700 hover:bg-gray-300 
-                   dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                   text-muted-foreground hover:text-foreground "
       aria-label="Toggle theme"
     >
-      <Moon 
-        className={` absolute transition-all duration-500 ${
-          isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
-        }`}
+      <Moon
+        className={` absolute transition-all duration-500 ${isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
+          }`}
       />
-      <Sun 
-        className={` absolute transition-all duration-500 ${
-          isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
-        }`}
+      <Sun
+        className={` absolute transition-all duration-500 ${isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
+          }`}
       />
     </button>
   );

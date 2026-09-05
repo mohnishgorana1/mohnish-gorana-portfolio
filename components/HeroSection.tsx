@@ -46,7 +46,7 @@ export default function HeroSection() {
   `;
 
   return (
-    <section className="relative w-full min-h-[75vh] md:min-h-[85vh]  flex items-center justify-center pb-12 overflow-hidden">
+    <section className="relative w-full min-h-[70vh] md:min-h-[85vh]  flex items-center justify-center pb-12 overflow-hidden">
 
       {/* Abstract Cinematic Background Glows */}
       {/* <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-500/15 dark:bg-blue-500/10 rounded-full blur-[100px] md:blur-[120px] pointer-events-none -z-10" />
@@ -62,13 +62,13 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="md:hidden w-full max-w-sm mx-auto flex items-center justify-center px-2 py-3 mb-8 rounded-2xl dark:bg-secondary/50 shadow-sm shadow-secondary dark:shadow-none"
+          className="md:hidden w-full max-w-100 mx-auto flex items-center justify-center px-2 py-3 mb-8 rounded-2xl dark:bg-secondary/50 shadow-sm shadow-secondary dark:shadow-none"
         >
-          <div className="flex items-center justify-center gap-4 w-full">
+          <div className="flex items-center px-2 gap-4 w-full">
             <motion.div
               layoutId="profile-image"
               onClick={() => setIsImageOpen(true)}
-              className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 cursor-pointer"
+              className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/10 cursor-pointer"
             >
               <Image
                 src="/assets/profile_image.jpeg"
@@ -79,15 +79,15 @@ export default function HeroSection() {
               />
             </motion.div>
             <div className="flex flex-col gap-y-1">
-              <h2 className="text-[1.3rem] text-neutral-700 dark:text-neutral-400 font-bold leading-tight tracking-wide">Mohnish Gorana</h2>
-              <p className="text-[13px] text-neutral-700 dark:text-neutral-400 font-medium">
+              <h2 className="text-[1.6rem] text-neutral-700 dark:text-neutral-400 font-bold leading-tight tracking-wide">Mohnish Gorana</h2>
+              <p className="text-[14px] text-neutral-700 dark:text-neutral-400 font-medium">
                 MERN Stack <span className="text-border mx-1"> <strong className="text-neutral-500">|</strong> </span> Next.js
               </p>
 
               {/* Exact reference image styled badge */}
               <div className="flex items-center gap-1.5">
                 <span className="size-1.5 bg-[#00d084] rounded-full shadow-[0_0_8px_0_#00d084]"></span>
-                <span className="text-[9px] text-[#00d084] font-bold uppercase tracking-widest">Available for work</span>
+                <span className="text-[10px] text-[#00d084] font-bold uppercase tracking-widest">Available for work</span>
               </div>
             </div>
           </div>
@@ -101,13 +101,13 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="md:col-span-7 flex flex-col items-center md:items-start h-full text-center md:text-left gap-y-4 md:gap-y-8 md:px-2"
+            className="md:col-span-7 flex flex-col h-full text-left md:text-left gap-y-4 md:gap-y-8 md:px-2"
           >
             {/* Core */}
-            <div className="flex flex-col items-center justify-evenly h-full md:items-start gap-y-4 w-full">
+            <div className="flex flex-col justify-evenly h-full gap-y-4 w-full">
 
               {/* Status & GenAI Badge Group */}
-              <div className="w-full flex flex-col sm:flex-row flex-wrap justify-center md:justify-start items-center gap-3 md:gap-4">
+              <div className="w-full flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
                 <div className="w-full sm:w-auto hidden md:inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border border-border bg-secondary/30 backdrop-blur-md text-xs font-medium text-foreground shadow-sm tracking-widest">
                   <span className="relative flex size-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -140,9 +140,9 @@ export default function HeroSection() {
               </p>
 
               {/* Call to Actions */}
-              <div className="px-4 md:px-0 flex  flex-wrap items-center justify-center md:justify-start gap-4 pt-2 w-full sm:w-auto">
-                <Link href="/projects" className="w-full sm:w-auto cursor-pointer">
-                  <MovingBorderButton className="w-full sm:w-auto h-14 font-semibold text-sm py-0.5 transition-all hover:scale-105 active:scale-95 duration-300">
+              <div className="flex flex-row flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+                <Link href="/projects" className="w-auto cursor-pointer">
+                  <MovingBorderButton className="w-full sm:w-auto h-14 font-semibold text-[12px] md:text-sm py-0.5 transition-all hover:scale-105 active:scale-95 duration-300">
                     Explore Projects
                     <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
                   </MovingBorderButton>
@@ -152,9 +152,9 @@ export default function HeroSection() {
                   href="https://drive.google.com/file/d/1fGSpqQ_NLIMY-fd879HgINXnoUIKzoYX/view"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto cursor-pointer group"
+                  className="w-auto cursor-pointer group"
                 >
-                  <button className={`w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-full px-8 cursor-pointer font-semibold text-sm text-foreground transition-all hover:scale-105 active:scale-95 duration-300 ${glassClasses}`}>
+                  <button className={`w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-full px-8 cursor-pointer font-semibold text-[12px] md:text-sm text-foreground transition-all hover:scale-105 active:scale-95 duration-300 ${glassClasses}`}>
                     <FileText size={18} className="mr-2 text-muted-foreground group-hover:text-foreground transition-colors" />
                     View Resume
                   </button>

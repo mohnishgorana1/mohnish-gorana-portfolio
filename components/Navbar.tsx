@@ -49,7 +49,7 @@ function DockIcon({ icon, label, href, isExternal, mouseX, onClick }: DockIconPr
 
   const content = (
     <>
-      <span className="absolute top-full mt-1 scale-0 group-hover:scale-100 transition-all duration-200 rounded-lg bg-foreground px-3 py-1.5 text-xs font-semibold text-background whitespace-nowrap shadow-xl z-50 pointer-events-none origin-top">
+      <span className="absolute top-full mt-1 scale-0 group-hover:scale-100 transition-all duration-240 rounded-lg bg-foreground px-3 py-1.5 text-xs font-semibold text-background whitespace-nowrap shadow-xl z-50 pointer-events-none origin-top">
         {label}
       </span>
       <div className="flex w-full h-full items-center justify-center text-muted-foreground group-hover:text-foreground dark:hover:text-white transition-colors duration-300">
@@ -141,41 +141,38 @@ const Navbar = () => {
       {/* Mobile Menu Navbar (Visible on Mobile) */}
       {/* ======================================= */}
       {/* Added 'relative z-50' so it stays above the blur overlay */}
-      <nav className={`md:hidden relative z-50 flex items-center justify-between gap-3 ${navContainerClasses} px-4`}>
+      <nav className={`fixed top-5 max-w-[25rem] w-full md:hidden z-50 flex items-center justify-evenly gap-x-4 px-8 ${navContainerClasses}`}>
 
-        <div className="flex items-center gap-3">
-          <Link href="/" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
-            <Home size={20} />
-          </Link>
-          <Link href="/projects" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
-            <Code size={20} />
-          </Link>
-        </div>
+        <Link href="/" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+          <Home size={20} />
+        </Link>
 
-        <div className="w-px h-5 bg-border/80" />
-
-        <div className="flex items-center gap-3">
-          <Link href="https://github.com/mohnishgorana1" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-            <BsGithub size={18} />
-          </Link>
-          <Link href="https://www.linkedin.com/in/mohnish-gorana-804374340/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-            <BsLinkedin size={18} />
-          </Link>
-        </div>
+        <Link href="/projects" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+          <Code size={20} />
+        </Link>
 
         <div className="w-px h-5 bg-border/80" />
 
-        <div className="flex items-center mx-2">
+        <Link href="https://github.com/mohnishgorana1" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+          <BsGithub size={20} />
+        </Link>
+
+        <Link href="https://www.linkedin.com/in/mohnish-gorana-804374340/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+          <BsLinkedin size={20} />
+        </Link>
+
+        <div className="w-px h-5 bg-border/80" />
+
+        <div className="">
           <ThemeToggle />
         </div>
 
-        <div className="w-px h-5 bg-border/80 " />
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-foreground hover:text-muted-foreground transition-colors flex items-center justify-center p-1"
+          className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1"
         >
-          {isOpen ? <X size={22} /> : <Menu size={22} />}
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
@@ -202,7 +199,7 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden absolute top-16 left-4 right-4 z-50 bg-background/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl overflow-hidden"
+              className="md:hidden absolute top-18 left-4 right-4 z-50 bg-background/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl overflow-hidden"
             >
               <div className="flex flex-col p-3 space-y-1">
                 {navItems.map((item) => (
