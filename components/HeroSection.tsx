@@ -68,7 +68,7 @@ export default function HeroSection() {
             <motion.div
               layoutId="profile-image"
               onClick={() => setIsImageOpen(true)}
-              className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/10 cursor-pointer"
+              className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/10 cursor-pointer shrink-0"
             >
               <Image
                 src="/assets/profile_image.jpeg"
@@ -101,13 +101,14 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="md:col-span-7 flex flex-col h-full text-left md:text-left gap-y-4 md:gap-y-8 md:px-2"
+            // Center alignment applied on mobile, left on md+
+            className="md:col-span-7 flex flex-col h-full items-center md:items-start text-center md:text-left gap-y-4 md:gap-y-8 md:px-2"
           >
             {/* Core */}
-            <div className="flex flex-col justify-evenly h-full gap-y-4 w-full">
+            <div className="flex flex-col justify-evenly h-full items-center md:items-start gap-y-4 w-full">
 
               {/* Status & GenAI Badge Group */}
-              <div className="w-full flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
+              <div className="w-full flex flex-col sm:flex-row flex-wrap justify-center md:justify-start items-center gap-3 md:gap-4">
                 <div className="w-full sm:w-auto hidden md:inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border border-border bg-secondary/30 backdrop-blur-md text-xs font-medium text-foreground shadow-sm tracking-widest">
                   <span className="relative flex size-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -115,8 +116,6 @@ export default function HeroSection() {
                   </span>
                   <span>AVAILABLE FOR WORK</span>
                 </div>
-
-
 
                 <div className="w-fit sm:w-auto inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-xs font-medium uppercase tracking-widest text-amber-500 shadow-sm">
                   <Sparkles size={14} className="text-amber-500" />
@@ -140,7 +139,7 @@ export default function HeroSection() {
               </p>
 
               {/* Call to Actions */}
-              <div className="flex flex-row flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+              <div className="flex flex-row flex-wrap justify-center md:justify-start items-center gap-4 pt-2 w-full sm:w-auto">
                 <Link href="/projects" className="w-auto cursor-pointer">
                   <MovingBorderButton className="w-full sm:w-auto h-14 font-semibold text-[12px] md:text-sm py-0.5 transition-all hover:scale-105 active:scale-95 duration-300">
                     Explore Projects
