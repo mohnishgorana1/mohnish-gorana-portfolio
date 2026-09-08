@@ -72,7 +72,7 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen bg-background text-foreground selection:bg-accent selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen bg-background text-foreground selection:bg-neutral-700 selection:text-neutral-200 dark:selection:bg-neutral-700 dark:selection:text-neutral-400`}
       >
         <ThemeProvider
           attribute="class"
@@ -80,11 +80,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {/* Main container constrained to 5xl with subtle flat borders (tasteful minimalism) */}
-          <main className="max-w-5xl mx-auto px-4 sm:px-6 w-full flex flex-col justify-between min-h-screen">
+          {/* Main container constrained to 7xl with subtle flat borders (tasteful minimalism) */}
+          <main className="max-w-7xl mx-auto px-2 sm:px-6 w-full flex flex-col justify-between min-h-screen">
             <Navbar />
-            <div className="min-h-[80vh] w-full pt-2">{children}</div>
-            <footer className="w-full mt-8 self-end pb-4 border-t border-border/40">
+            <div className="min-h-[80vh] w-full md:pt-2">{children}</div>
+            <footer className="w-full mt-8 self-end pb-4">
               <Footer />
             </footer>
           </main>

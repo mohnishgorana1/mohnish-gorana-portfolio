@@ -9,7 +9,6 @@ const Footer = () => {
       
       {/* Navigation Links */}
       <div className="flex flex-wrap justify-center gap-6 font-medium">
-        <Link href="/about" className={linkClassNames}>About</Link>
         <Link href="/projects" className={linkClassNames}>Projects</Link>
         <Link href="/machine-coding-tasks" className={linkClassNames}>Machine Coding</Link>
         <Link href="/contact" className={linkClassNames}>Contact</Link>

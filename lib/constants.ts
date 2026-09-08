@@ -19,6 +19,11 @@ import {
   SiNodedotjs,
   SiExpress,
   SiCloudinary,
+  SiGit,
+  SiDocker,
+  SiFigma,
+  SiPostman,
+  SiRedux,
 } from "react-icons/si";
 import { TbBrandThreejs, TbBrandSocketIo } from "react-icons/tb";
 import { imgIcon } from "@/helpers/icon";
@@ -52,6 +57,11 @@ export const techStacksMap: any = {
     icon: imgIcon("/assets/icons/clerk.png"),
     color: "#4B32B3",
   },
+  Git: { icon: SiGit, color: "#F05032" },
+  Docker: { icon: SiDocker, color: "#2496ED" },
+  Figma: { icon: SiFigma, color: "#F24E1E" },
+  Postman: { icon: SiPostman, color: "#FF6C37" },
+  "Redux Toolkit": { icon: SiRedux, color: "#764ABC" },
 };
 
 export const projects = [
@@ -430,15 +440,60 @@ export const contactBgImages = [
 ];
 
 export const machineCodingTaskConfigs = [
-  { name: "CINEMA TICKET BOOKING", path: "cinema-ticket-booking" },
-  { name: "PAGINATION", path: "pagination" },
-  { name: "INFINITE SCROLL", path: "infinite-scroll" },
-  { name: "OTP INPUT", path: "otp-input" },
-  { name: "PROGRESS BAR", path: "progress-bar" },
-  { name: "NESTED CHECKBOX", path: "nested-checkbox" },
-  { name: "CHIPS INPUT", path: "chips-input" },
-  { name: "TAB FORM", path: "tab-form" },
-  { name: "ACCORDION", path: "accordion" },
+  {
+    name: "CINEMA TICKET BOOKING",
+    path: "cinema-ticket-booking",
+    description:
+      "Interactive seat selection grid with dynamic pricing and state management.",
+  },
+  {
+    name: "PAGINATION",
+    path: "pagination",
+    description:
+      "Client-side data navigation with numbered bounds and ellipsis logic.",
+  },
+  {
+    name: "INFINITE SCROLL",
+    path: "infinite-scroll",
+    description:
+      "Dynamic data fetching on scroll using the Intersection Observer API.",
+  },
+  {
+    name: "OTP INPUT",
+    path: "otp-input",
+    description:
+      "Multi-field passcode input with auto-focus, backspace handling, and paste support.",
+  },
+  {
+    name: "PROGRESS BAR",
+    path: "progress-bar",
+    description:
+      "Animated completion indicator with concurrent request queueing.",
+  },
+  {
+    name: "NESTED CHECKBOX",
+    path: "nested-checkbox",
+    description:
+      "Hierarchical tree selection with parent-child state synchronization.",
+  },
+  {
+    name: "CHIPS INPUT",
+    path: "chips-input",
+    description:
+      "Multi-tag entry system with keyboard navigation and deletion handling.",
+  },
+  {
+    name: "TAB FORM",
+    path: "tab-form",
+    description:
+      "Multi-step wizard layout with state persistence and step validation.",
+  },
+  {
+    name: "ACCORDION",
+    path: "accordion",
+    description:
+      "Collapsible content panels with smooth transitions and single/multiple open modes.",
+  },
 ];
 
 export const designShowcaseConfigs = [
@@ -465,15 +520,13 @@ export const designShowcaseConfigs = [
   {
     name: "LIFECYCLE TRACKER",
     path: "lifecycle-tracker",
-    description:
-      "",
+    description: "",
     inspiration: "",
   },
   {
     name: "ANIMATED STEPPER FORM",
     path: "animated-stepper-form",
-    description:
-      "",
+    description: "",
     inspiration: "",
   },
 ];

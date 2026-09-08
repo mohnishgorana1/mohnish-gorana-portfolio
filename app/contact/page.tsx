@@ -1,12 +1,10 @@
 "use client";
-import ContactMe from "@/components/ContactMe";
+import ContactModal from "@/components/ContactModal";
 
-function ContactUs() {
+export default function ContactUs() {
   return (
-    <main className="pt-4 sm:pt-8 md:pt-12 w-full rounded-2xl transition-colors duration-300">
-        <ContactMe isHomePage={false}/>
+    <main className="pt-4 md:pt-16 w-full min-h-screen transition-colors duration-300">
+        <ContactModal isContactPage={true}  />
     </main>
   );
 }
-
-export default ContactUs;

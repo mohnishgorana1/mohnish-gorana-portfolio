@@ -2,7 +2,7 @@
 import { machineCodingTaskConfigs } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TbPlayerTrackNextFilled } from "react-icons/tb";
+import { ArrowRight } from "lucide-react";
 
 export default function MachineCodingLayout({
   children,
@@ -13,19 +13,12 @@ export default function MachineCodingLayout({
   const BASE_PATH = "/machine-coding-tasks";
 
   // --- LOGIC START (100% UNTOUCHED) ---
-
-  // 1. Determine current page slug
   const currentPageSlug = pathname?.split("/").filter(Boolean).pop();
-
-  // 2. Check if we are on the main listing page
   const isHomePage = currentPageSlug === "machine-coding-tasks";
-
-  // 3. Format the name directly
   const currentTaskName = currentPageSlug
     ? currentPageSlug.replace(/-/g, " ").toUpperCase()
-    : "MACHINE CODING CHALLENGES"; // Added default for home page
+    : "MACHINE CODING CHALLENGES"; 
 
-  // 4. Calculate Next Logic
   const currentIndex = machineCodingTaskConfigs.findIndex((task) =>
     pathname.endsWith(task.path)
   );
@@ -37,57 +30,59 @@ export default function MachineCodingLayout({
 
   const nextLabel =
     currentIndex !== -1 && currentIndex < machineCodingTaskConfigs.length - 1
-      ? `${machineCodingTaskConfigs[currentIndex + 1].name} `
-      : "Back to Home";
-
+      ? `${machineCodingTaskConfigs[currentIndex + 1].name}`
+      : "Back to Directory";
   // --- LOGIC END ---
 
   return (
-    <main className="min-h-screen bg-background px-4 sm:px-6 w-full max-w-6xl mx-auto pt-24 pb-12">
+    <main className="min-h-screen bg-background px-4 sm:px-6 py-10 w-full max-w-4xl mx-auto flex flex-col">
       
-      {/* SHARP HEADER */}
-      <header className="mb-12 pb-6 border-b border-border/50 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      {/* SHARP & SEAMLESS HEADER */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-6 mb-2 border-b border-border/40">
         
+        {/* Left: Path & Title */}
         <Link
           href={
             isHomePage
               ? BASE_PATH
               : `${BASE_PATH}/${machineCodingTaskConfigs[currentIndex]?.path ?? ""}`
           }
-          className="group flex flex-col"
+          className="group flex flex-col outline-none"
         >
-          <span className="text-[10px] font-mono font-bold tracking-widest text-muted-foreground uppercase mb-2">
-            {isHomePage ? "Directory" : "Current Execution"}
-          </span>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground group-hover:text-muted-foreground transition-colors duration-300">
+          <div className="flex items-center gap-2 mb-2.5">
+            <div className="size-1.5 rounded-full bg-foreground/30 group-hover:bg-foreground transition-colors duration-300" />
+            <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-muted-foreground uppercase">
+              {isHomePage ? "Directory" : "Current Execution"}
+            </span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground group-hover:text-foreground/70 transition-colors duration-300 leading-[1.1]">
             {currentTaskName}
           </h1>
         </Link>
 
-        {/* NEXT UP BUTTON (Sharp & Minimal) */}
+        {/* Right: Next Up Minimal Link */}
         {!isHomePage && (
           <Link
             href={nextPath}
-            className="group flex items-center gap-4 text-right hover:bg-secondary/30 p-2 -mr-2 transition-colors duration-300"
+            className="group flex items-center gap-3 text-right outline-none shrink-0"
           >
             <div className="flex flex-col items-end">
-              <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest mb-1">
+              <span className="text-[9px] font-mono font-bold text-muted-foreground/70 uppercase tracking-[0.2em] mb-0.5">
                 Next Up
               </span>
-              <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+              <span className="text-[13px] md:text-sm font-semibold text-foreground/80 group-hover:text-foreground transition-colors duration-300">
                 {nextLabel}
               </span>
             </div>
-            {/* Sharp Square Icon Box */}
-            <div className="flex items-center justify-center size-10 border border-border bg-secondary text-foreground group-hover:bg-foreground group-hover:text-background transition-all duration-300 shrink-0">
-              <TbPlayerTrackNextFilled className="w-4 h-4" />
+            <div className="flex items-center justify-center size-9 rounded-full bg-secondary/30 border border-border/40 text-muted-foreground group-hover:bg-foreground group-hover:border-foreground group-hover:text-background transition-all duration-300">
+              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
             </div>
           </Link>
         )}
       </header>
 
       {/* RENDER CHILDREN */}
-      <div className="w-full">
+      <div className="w-full flex-1">
         {children}
       </div>
       

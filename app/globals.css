@@ -2,19 +2,39 @@
 
 @theme {
   /* 🎨 Core Colors (Light Mode) */
-  --color-background: var(--color-neutral-50);
+  --color-background: var(--color-white);
   --color-foreground: var(--color-neutral-950);
-  --color-primary: var(--color-neutral-950);
-  --color-primary-foreground: var(--color-white);
-  --color-secondary: var(--color-neutral-200);
+  
+  --color-surface: var(--color-neutral-50);
+  --color-surface-foreground: var(--color-neutral-900);
+  
+  --color-primary: var(--color-neutral-900);
+  --color-primary-foreground: var(--color-neutral-100);
+  
+  --color-secondary: var(--color-neutral-300);
   --color-secondary-foreground: var(--color-neutral-800);
-  --color-muted: var(--color-neutral-100);
-  --color-muted-foreground: var(--color-neutral-500);
+  
+  --color-muted: var(--color-neutral-400);
+  --color-muted-foreground: var(--color-neutral-700);
+  
   --color-accent: var(--color-blue-600);
+  --color-accent-foreground: var(--color-neutral-100);
+  
   --color-border: var(--color-neutral-200);
+  --color-ring: var(--color-blue-600);
 
-  --color-success: var(--color-emerald-500);
+  /* 🚦 Semantic Colors (Feedback & Alerts) */
+  --color-success: var(--color-emerald-700);
+  --color-success-foreground: var(--color-emerald-100);
+  
   --color-warning: var(--color-amber-500);
+  --color-warning-foreground: var(--color-amber-100);
+  
+  --color-error: var(--color-red-500);
+  --color-error-foreground: var(--color-red-100);
+  
+  --color-info: var(--color-sky-500);
+  --color-info-foreground: var(--color-white);
 
   /* 📏 Border Radius */
   --radius-4xl: 2rem;
@@ -41,18 +61,40 @@
 
 @layer base {
   .dark {
-    --color-background: var(--color-black);
+    /* 🎨 Core Colors (Dark Mode) */
+    --color-background: var(--color-neutral-950);
     --color-foreground: var(--color-neutral-50);
-    --color-primary: var(--color-white);
-    --color-primary-foreground: var(--color-neutral-950);
-    --color-secondary: var(--color-neutral-900);
+    
+    --color-surface: var(--color-neutral-900);
+    --color-surface-foreground: var(--color-neutral-100);
+    
+    --color-primary: var(--color-neutral-50);
+    --color-primary-foreground: var(--color-neutral-900);
+    
+    --color-secondary: var(--color-neutral-800);
     --color-secondary-foreground: var(--color-neutral-300);
-    --color-muted: var(--color-neutral-900);
+    
+    --color-muted: var(--color-neutral-700);
     --color-muted-foreground: var(--color-neutral-400);
+    
     --color-accent: var(--color-blue-500);
+    --color-accent-foreground: var(--color-neutral-100);
+    
     --color-border: var(--color-neutral-800);
-    --color-success: var(--color-emerald-400);
+    --color-ring: var(--color-blue-500);
+
+    /* 🚦 Semantic Colors (Dark Mode - Slightly muted for glow) */
+    --color-success: var(--color-emerald-500);
+    --color-success-foreground: var(--color-emerald-950);
+    
     --color-warning: var(--color-amber-400);
+    --color-warning-foreground: var(--color-amber-950);
+    
+    --color-error: var(--color-red-400);
+    --color-error-foreground: var(--color-red-950);
+    
+    --color-info: var(--color-sky-400);
+    --color-info-foreground: var(--color-sky-950);
   }
 }
 
@@ -67,10 +109,12 @@
 
   /* Premium Minimalist Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 3px;
   }
+
+
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    @apply bg-transparent my-2 mx-2;
   }
   ::-webkit-scrollbar-thumb {
     @apply bg-neutral-300 rounded-full;

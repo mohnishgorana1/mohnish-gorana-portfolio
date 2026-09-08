@@ -5,22 +5,37 @@ import GithubActivitySection from "@/components/GithubActivitySection";
 import HeroSection from "@/components/HeroSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import WhatICanOffer from "@/components/WhatICanOffer";
+import { Link } from "lucide-react";
+import { FiChevronDown } from "react-icons/fi";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="max-w-4xl mx-auto mt-4 md:mt-6 space-y-8 md:space-y-10">
+      
       <section className="">
         <HeroSection />
       </section>
+
+      <div className="w-full border border-border/60 dark:border-border/20"></div>
+
+      <section id="projects" className="">
+        <ProjectsSection isHome={true} />
+      </section>
+
+      <div className="w-full border border-border/60 dark:border-border/20"></div>
+
       <section id="github" className="">
+        <GithubActivitySection />
+      </section>
+
+
+      {/* <section id="github" className="">
         <GithubActivitySection />
       </section>
       <section id="stats" className="">
         <BentoGridSection />
       </section>
-      <section className="flex flex-col my-auto mx-auto h-auto ">
-        <ProjectsSection isHome={true} />
-      </section>
+     
       <section id="about" className="">
         <AboutSection />
       </section>
@@ -29,7 +44,7 @@ export default function Home() {
       </section>
       <section className="">
         <WhatICanOffer />
-      </section>
+      </section> */}
     </main>
   );
 }

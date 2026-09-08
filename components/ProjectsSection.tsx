@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { projects } from "@/lib/constants";
@@ -33,39 +33,39 @@ export default function ProjectsSection({ isHome = false }: ProjectsSectionProps
   };
 
   return (
-    <section className={`w-full bg-background text-foreground ${isHome ? "py-24" : "pt-32 pb-20"}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section className={`w-full -mt-1 text-foreground ${isHome ? "" : "pt-16 pb-20"}`}>
+      <div className="w-full mx-auto">
         
         {/* HEADER (Conditional) */}
         {isHome ? (
-          <div className="text-center mb-16 md:mb-20 px-4 relative z-10">
+          <div className="mb-10 md:mb-10 relative z-10 px-2">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground"
+              className="text-2xl md:text-3xl font-bold tracking-tight text-surface-foreground"
             >
-              Featured Projects.
+              Featured Projects
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto font-medium"
+              className="mt-2 text-[13px] md:text-sm text-muted-foreground font-medium"
             >
               A glimpse into my most impactful work using modern tech.
             </motion.p>
           </div>
         ) : (
-          <div className="w-full mx-auto pb-16 px-4 text-center relative z-20">
+          <div className="w-full mx-auto pb-12 px-4 text-center relative z-20">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight text-foreground"
+              className="text-4xl md:text-6xl font-bold tracking-tight text-surface-foreground"
             >
               The Ultimate <br /> 
               <span className="text-muted-foreground font-serif italic font-light">Full Stack Work.</span>
@@ -78,8 +78,8 @@ export default function ProjectsSection({ isHome = false }: ProjectsSectionProps
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 w-full"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full px-2 md:px-0"
         >
           {displayProjects.map((project) => (
             <motion.div key={project.id} variants={itemVariants} className="h-full">
@@ -90,9 +90,9 @@ export default function ProjectsSection({ isHome = false }: ProjectsSectionProps
 
         {/* VIEW ALL BUTTON */}
         {isHome && (
-          <div className="mt-20 flex justify-center">
+          <div className="mt-12 flex justify-center">
             <Link href="/projects">
-              <button className="group inline-flex h-12 items-center justify-center rounded-full bg-foreground px-8 font-medium text-background transition-transform hover:scale-105 active:scale-95 shadow-xl">
+              <button className="cursor-pointer  group inline-flex h-11 md:h-12 items-center justify-center rounded-full bg-secondary/50 hover:bg-muted/30 text-foreground border border-transparent dark:border-border/50 shadow-sm hover:shadow-md px-8 font-semibold text-[13px] md:text-sm transition-all duration-300 hover:scale-105 active:scale-95">
                 View All Projects
                 <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
               </button>

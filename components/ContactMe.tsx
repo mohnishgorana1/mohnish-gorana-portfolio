@@ -89,26 +89,26 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
         viewport={{ once: true, margin: "-100px" }}
         className="max-w-6xl mx-auto px-4 relative z-10"
       >
-        
+
         {/* Subtle Background Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-secondary/80 dark:bg-secondary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
         <div className={`relative py-6 px-4 sm:p-10 md:p-14 rounded-[2.5rem] ${glassClasses}`}>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            
+
             {/* =========================================
                 LEFT PANEL: Info & Socials
             ========================================= */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-10">
-              
+
               <div className="space-y-6">
                 <motion.div variants={itemVariants}>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                     Get in touch
                   </div>
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
-                    Let's Build <br/>
+                    Let's Build <br />
                     <span className="text-muted-foreground font-serif italic font-light">Something.</span>
                   </h2>
                   <p className="mt-6 text-muted-foreground text-lg leading-relaxed font-medium">
@@ -152,7 +152,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
             ========================================= */}
             <motion.div variants={itemVariants} className="lg:col-span-7">
               <form onSubmit={handleSubmit} className="space-y-6 bg-background/50 backdrop-blur-md sm:p-8 rounded-4xl sm:border border-border/50">
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-foreground ml-1">Full Name</label>
@@ -161,7 +161,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
                       placeholder="John Doe"
                       className={inputClasses}
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
                     />
                   </div>
@@ -172,7 +172,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
                       placeholder="john@example.com"
                       className={inputClasses}
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
                     />
                   </div>
@@ -185,17 +185,17 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
                     rows={5}
                     className={`${inputClasses} resize-none`}
                     value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                   />
                 </div>
-                
+
                 <button
                   type="submit"
                   disabled={loading || isSuccess}
                   className={`w-full h-14 rounded-full font-medium text-base transition-all duration-300 shadow-md
-                    ${isSuccess 
-                      ? "bg-emerald-500 text-white border border-emerald-400" 
+                    ${isSuccess
+                      ? "bg-emerald-500 text-white border border-emerald-400"
                       : "bg-foreground text-background hover:scale-[1.02] active:scale-95"}
                   `}
                 >
@@ -211,7 +211,7 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
                     )}
                   </AnimatePresence>
                 </button>
-                
+
                 {/* Error State */}
                 <AnimatePresence>
                   {status && !isSuccess && (
@@ -231,7 +231,6 @@ const ContactMe = ({ isHomePage }: { isHomePage: boolean }) => {
   );
 };
 
-// 🌟 Reusable Contact Detail Component
 const ContactDetail = ({ icon: Icon, title, content, link }: any) => (
   <div className="flex items-center gap-4 p-4 rounded-2xl bg-secondary/30 border border-border/50 group hover:bg-secondary/50 transition-colors">
     <div className="p-3 rounded-xl bg-background border border-border/50 text-foreground shadow-sm group-hover:scale-105 transition-transform">
