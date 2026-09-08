@@ -136,7 +136,7 @@ export default function HeroSection() {
                 )}
               </div>
 
-              <div className="hidden sm:flex items-center gap-4 ml-4">
+              <div className="hidden md:flex items-center gap-4 ml-4">
                 <Link
                   href="https://github.com/mohnishgorana1"
                   target="_blank"
