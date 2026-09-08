@@ -116,13 +116,13 @@ export default function HeroSection() {
                 rel="noopener noreferrer"
                 className="cursor-pointer group"
               >
-                <button className="w-36 md:w-38 h-10 sm:w-auto inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 text-foreground transition-all hover:scale-105 active:scale-95 duration-300 shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50">
+                <button className="w-36 md:w-38 h-10 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 text-foreground transition-all hover:scale-105 active:scale-95 duration-300 shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50">
                   <FileText size={16} className="mr-2 transition-colors" />
                   <span className="pb-0.5">View Resume</span>
                 </button>
               </Link>
 
-              <div className="relative w-36 md:w-[152px] h-10 shrink-0">
+              <div className="relative w-36 md:w-38 h-10 shrink-0">
                 {!isContactOpen && (
                   <motion.button
                     layoutId="contact-modal-wrapper"
@@ -136,7 +136,7 @@ export default function HeroSection() {
                 )}
               </div>
 
-              <div className="flex items-center gap-4 ml-4">
+              <div className="hidden sm:flex items-center gap-4 ml-4">
                 <Link
                   href="https://github.com/mohnishgorana1"
                   target="_blank"
