@@ -109,35 +109,53 @@
 
   /* Premium Minimalist Scrollbar */
   ::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-transparent my-2 mx-2;
+    @apply bg-transparent;
+    margin: 4px;
   }
+
   ::-webkit-scrollbar-thumb {
     @apply bg-neutral-300 rounded-full;
   }
+
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-800;
+    @apply bg-neutral-700;
   }
+
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-400 dark:bg-neutral-700;
+    @apply bg-neutral-400 dark:bg-neutral-600;
+  }
+
+  /* 🌟 BULLETPROOF: HIDE TOP/BOTTOM ARROWS COMPLETELY */
+  ::-webkit-scrollbar-button,
+  ::-webkit-scrollbar-button:start:decrement,
+  ::-webkit-scrollbar-button:end:increment {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 }
 
 @layer utilities {
-  .no-scrollbar {
-    scrollbar-width: thin; /* Firefox */
+  /* 🌟 Minimalist Line Scrollbar Utility */
+  .minimal-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    width: 4px;
+
   }
-  .no-scrollbar::-webkit-scrollbar {
-    height: 2px;
-    width: 3px;
+  .minimal-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 22px 0; /* Top aur bottom se thoda gap */
   }
-  .no-scrollbar::-webkit-scrollbar-thumb {
+  .minimal-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-neutral-300 rounded-full;
   }
-  .dark .no-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-neutral-800;
+  .dark .minimal-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-neutral-700;
   }
+  
 }

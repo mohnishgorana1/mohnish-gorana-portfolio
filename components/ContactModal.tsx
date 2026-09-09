@@ -78,10 +78,10 @@ export default function ContactModal({ isContactPage = false, onClose }: Contact
       exit={!isContactPage ? { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.15 } } : undefined}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={cn(
-        "w-full max-w-4xl bg-surface border border-border relative",
+        "w-full max-w-4xl bg-surface border border-border relative minimal-scrollbar",
         isContactPage
           ? "mx-auto shadow-lg"
-          : "max-h-[95vh] overflow-y-auto overflow-x-hidden shadow-2xl pointer-events-auto no-scrollbar"
+          : "max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl pointer-events-auto"
       )}
     >
       <motion.div
@@ -270,9 +270,9 @@ export default function ContactModal({ isContactPage = false, onClose }: Contact
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 z-[90] bg-background/80 backdrop-blur-sm"
+        className="fixed inset-0 z-[90] bg-background/80 backdrop-blur-sm no-scrollbar"
       />
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 pointer-events-none no-scrollbar">
         {contactCard}
       </div>
     </>
