@@ -8,7 +8,12 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { flushSync } from "react-dom";
 
-const ThemeToggle = () => {
+interface ThemeToggleProps {
+  /** Override the button's own size classes. Defaults to "w-1/2 h-1/2" to preserve existing usage. */
+  className?: string;
+}
+
+const ThemeToggle = ({ className }: ThemeToggleProps = {}) => {
   // HOOKS MUST BE CALLED UNCONDITIONALLY AT THE TOP LEVEL
   const { setTheme, theme, resolvedTheme } = useTheme();
   // We explicitly use useState and useEffect imports here:
@@ -82,8 +87,8 @@ const ThemeToggle = () => {
     <button
       ref={buttonRef}
       onClick={toggleThemeWithTransition}
-      className="cursor-pointer p-0 rounded-lg transition-all duration-300 w-1/2 h-1/2 flex items-center justify-center
-                   text-muted-foreground hover:text-foreground "
+      className={`cursor-pointer p-0 rounded-lg transition-all duration-300 ${className ?? "w-1/2 h-1/2"} flex items-center justify-center
+                   text-muted-foreground hover:text-foreground `}
       aria-label="Toggle theme"
     >
       <Moon
