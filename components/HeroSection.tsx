@@ -111,7 +111,7 @@ export default function HeroSection() {
             {/* Call to Actions */}
             <div className="md:absolute md:bottom-2 flex items-center gap-3 md:gap-4 mt-6">
               <Link
-                href="https://drive.google.com/file/d/1fGSpqQ_NLIMY-fd879HgINXnoUIKzoYX/view"
+                href="https://drive.google.com/file/d/1bIlkdTT1k4Pwi3srKD947iK_u9S3yN7q/view?usp=drive_link"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cursor-pointer group"
