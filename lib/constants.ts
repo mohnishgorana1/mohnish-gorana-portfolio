@@ -444,55 +444,55 @@ export const machineCodingTaskConfigs = [
     name: "CINEMA TICKET BOOKING",
     path: "cinema-ticket-booking",
     description:
-      "Interactive seat selection grid with dynamic pricing and state management.",
+      "Interactive seat selection grid with dynamic pricing and state management. Handles seat locking, category-based pricing tiers, and real-time availability updates.",
   },
   {
     name: "PAGINATION",
     path: "pagination",
     description:
-      "Client-side data navigation with numbered bounds and ellipsis logic.",
+      "Client-side data navigation with numbered bounds and ellipsis logic. Supports configurable page sizes, sibling ranges, and edge-case handling for first/last pages.",
   },
   {
     name: "INFINITE SCROLL",
     path: "infinite-scroll",
     description:
-      "Dynamic data fetching on scroll using the Intersection Observer API.",
+      "Dynamic data fetching on scroll using the Intersection Observer API. Includes debounced fetch triggers, loading states, and graceful handling of end-of-list scenarios.",
   },
   {
     name: "OTP INPUT",
     path: "otp-input",
     description:
-      "Multi-field passcode input with auto-focus, backspace handling, and paste support.",
+      "Multi-field passcode input with auto-focus, backspace handling, and paste support. Manages keyboard navigation across fields and validates numeric-only entry.",
   },
   {
     name: "PROGRESS BAR",
     path: "progress-bar",
     description:
-      "Animated completion indicator with concurrent request queueing.",
+      "Animated completion indicator with concurrent request queueing. Tracks multiple async tasks simultaneously while smoothly interpolating overall progress.",
   },
   {
     name: "NESTED CHECKBOX",
     path: "nested-checkbox",
     description:
-      "Hierarchical tree selection with parent-child state synchronization.",
+      "Hierarchical tree selection with parent-child state synchronization. Implements indeterminate states and cascading checks/unchecks across arbitrary tree depths.",
   },
   {
     name: "CHIPS INPUT",
     path: "chips-input",
     description:
-      "Multi-tag entry system with keyboard navigation and deletion handling.",
+      "Multi-tag entry system with keyboard navigation and deletion handling. Supports duplicate prevention, comma/enter-based tag creation, and arrow-key focus movement.",
   },
   {
     name: "TAB FORM",
     path: "tab-form",
     description:
-      "Multi-step wizard layout with state persistence and step validation.",
+      "Multi-step wizard layout with state persistence and step validation. Preserves form data across steps and blocks forward navigation until each step is valid.",
   },
   {
     name: "ACCORDION",
     path: "accordion",
     description:
-      "Collapsible content panels with smooth transitions and single/multiple open modes.",
+      "Collapsible content panels with smooth transitions and single/multiple open modes. Uses height animation and ARIA attributes for accessible expand/collapse behavior.",
   },
 ];
 

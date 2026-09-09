@@ -13,7 +13,7 @@ const navItems = [
   { name: "Projects", href: "/projects", icon: <Code className="w-1/2 h-1/2" /> },
   { name: "Blogs", href: "/blogs", icon: <NotebookText className="w-1/2 h-1/2" /> },
   { name: "Coding", href: "/machine-coding-tasks", icon: <Terminal className="w-1/2 h-1/2" /> },
-  { name: "Designs", href: "/design", icon: <Palette className="w-1/2 h-1/2" /> },
+  // { name: "Designs", href: "/design", icon: <Palette className="w-1/2 h-1/2" /> },
 ];
 
 const socialLinks = [
@@ -109,7 +109,7 @@ const Navbar = () => {
   `;
 
   return (
-    <main className="flex mt-4 h-18 w-full mx-auto flex-col items-center justify-center z-50">
+    <main className="relative flex mt-4 h-18 w-full mx-auto flex-col items-center justify-center z-50">
 
       {/* ======================================= */}
       {/* Desktop Apple Dock (Hidden on Mobile) */}
@@ -117,7 +117,7 @@ const Navbar = () => {
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className={`hidden md:flex items-center gap-2 ${navContainerClasses}`}
+        className={`hidden md:flex fixed top-5 items-center gap-2 ${navContainerClasses}`}
       >
         {navItems.map((item, idx) => (
           <DockIcon key={idx} icon={item.icon} label={item.name} href={item.href} mouseX={mouseX} />
@@ -141,7 +141,7 @@ const Navbar = () => {
       {/* ======================================= */}
       {/* Mobile Menu Navbar (Visible on Mobile) */}
       {/* ======================================= */}
-      <nav className={` top-5 max-w-[25rem] w-full md:hidden z-50 flex items-center justify-evenly gap-x-4 px-8 ${navContainerClasses}`}>
+      <nav className={`fixed top-5 max-w-[25rem] w-full md:hidden z-50 flex items-center justify-evenly gap-x-4 px-8 ${navContainerClasses}`}>
 
         <Link href="/" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
           <Home size={20} />

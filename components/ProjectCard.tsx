@@ -44,8 +44,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
-  // 🌟 Naya State: Track karne ke liye ki hover button par hai ya card par
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   // Bulletproof Video Autoplay Logic
   useEffect(() => {
@@ -77,14 +75,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   return (
     <motion.div
-      onClick={() => {
-        // Agar button par click nahi kiya hai, tabhi push karo
-        if (!isButtonHovered) router.push(`/projects/${slug}`);
-      }}
-      // 🌟 MAGIC: Agar button hovered hai, toh Card scale nahi hoga
-      whileTap={isButtonHovered ? { scale: 1 } : { scale: 0.97 }}
       className={cn(
-        "group pb-2 flex flex-col h-full rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 ease-out",
+        "group pb-2 flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-300 ease-out",
         // "bg-surface dark:bg-surface/50 dark:hover:bg-surface/60 transition-all duration-300 ease-out",
         "bg-linear-to-b from-neutral-50 to-neutral-100 ",
         "dark:bg-linear-to-b dark:from-neutral-800 dark:to-neutral-950",
@@ -171,28 +163,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       </section>
 
       {/* VIEW BUTTON */}
-      <div
-        className="px-5 md:px-6 pb-5 mt-auto group relative z-30"
-        onPointerEnter={() => setIsButtonHovered(true)} // 🌟 Pointer enter hui toh state TRUE
-        onPointerLeave={() => setIsButtonHovered(false)} // 🌟 Pointer leave hui toh state FALSE
-        onClick={(e) => e.stopPropagation()} // Double click rokne ke liye
-      >
-        <Link href={`/projects/${slug}`} className="shrink-0 inline-block w-full md:w-auto">
-          {/* Button ka apna individual tap scale */}
-          <motion.div
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.95, y: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}>
-            <MovingBorderButton className="group/arrow flex items-center gap-3 rounded-xl text-xs transition-transform duration-300">
-              <span>View Project</span>
-              <div className="flex items-center justify-center size-6 rounded-md transition-all duration-300">
-                <BsArrowUpRight
-                  size={12}
-                  className="transition-transform duration-500 group-hover/arrow:translate-x-0.5 group-hover/arrow:-translate-y-0.5 text-accent group-hover/arrow:text-foreground"
-                />
-              </div>
-            </MovingBorderButton>
-          </motion.div>
+      <div className="px-5 md:px-6 pb-5 mt-auto relative z-30">
+        <Link href={`/projects/${slug}`} className="shrink-0 inline-block w-full md:w-auto cursor-pointer">
+          <button
+            className={cn(
+              "cursor-pointer group/arrow relative flex items-center justify-center gap-2.5",
+              "w-full md:w-40 px-4 py-2.5 rounded-xl",
+              "text-sm font-semibold",
+              "bg-primary/95 dark:bg-primary/80 text-primary-foreground",
+              "border border-transparent",
+              "shadow-sm shadow-primary/20",
+              "transition-all duration-300 ease-out",
+              "hover:shadow-md hover:shadow-primary/30 hover:-translate-y-0.5",
+              "active:translate-y-0 active:shadow-sm",
+            )}
+          >
+            <span>View Project</span>
+            <BsArrowUpRight
+              size={13}
+              className="transition-transform duration-300 ease-out group-hover/arrow:translate-x-0.5 group-hover/arrow:-translate-y-0.5"
+            />
+          </button>
         </Link>
       </div>
     </motion.div>

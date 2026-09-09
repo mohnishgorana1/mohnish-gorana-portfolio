@@ -29,14 +29,14 @@ export default function MachineCodingTasks() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-4"
       >
         {machineCodingTaskConfigs.map((task, index) => (
           <motion.div key={task.path} variants={itemVariants} className="h-full">
             <Link
               href={`${pathname}/${task.path}`}
               className={cn(
-                "group relative flex flex-col justify-between h-full p-5 md:p-6 outline-none",
+                "min-h-66 group relative flex flex-col justify-between h-full p-5 md:p-6 outline-none",
                 "bg-secondary/10 hover:bg-secondary/30  transition-all duration-300 ease-out",
                 "border-2 border-border/70 dark:border-border/50 hover:border-border",
                 "rounded-xl md:rounded-2xl",
@@ -58,7 +58,8 @@ export default function MachineCodingTasks() {
                 <h2 className="text-lg font-bold text-foreground/90 tracking-tight group-hover:text-foreground transition-colors duration-300 leading-tight mb-2">
                   {task.name}
                 </h2>
-                <p className="text-[13px] text-muted-foreground/80 font-medium leading-relaxed line-clamp-2">
+                <p className="text-[13px] text-muted-foreground/80 font-medium leading-relaxed line-clamp-4 md:line-clamp-3">
+                  {task.description}
                   {task.description}
                 </p>
               </div>

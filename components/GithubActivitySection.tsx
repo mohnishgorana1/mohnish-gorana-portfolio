@@ -1,52 +1,99 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { BsGithub, BsStar, BsJournalCode, BsGit, BsPinAngle } from "react-icons/bs";
+import { motion, AnimatePresence } from "framer-motion";
+import { BsGithub, BsJournalCode, BsGit, BsPinAngle } from "react-icons/bs";
 import { FiActivity, FiClock } from "react-icons/fi";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { SiGithub } from "react-icons/si";
 
 const GITHUB_USERNAME = "mohnishgorana1";
-// Generate the contribution graph image (Green theme)
 const GRAPH_URL = `https://ghchart.rshah.org/10b981/${GITHUB_USERNAME}`;
+
+type Commit = {
+  sha: string;
+  message: string;
+};
+
+type Repo = {
+  id: number;
+  name: string;
+  html_url: string;
+  language: string | null;
+  full_name: string;
+};
+
+const contentContainerCardClasses =
+  `w-full max-w-full rounded-2xl md:rounded-3xl p-4 md:p-6 flex flex-col overflow-hidden
+  bg-surface dark:bg-surface/50
+  border border-border dark:border-0
+  shadow-lg hover:shadow-xl shadow-secondary dark:shadow-none dark:hover:shadow-none transition-all duration-300`
 
 export default function GithubActivitySection() {
   const [events, setEvents] = useState<any[]>([]);
-  const [pinnedRepos, setPinnedRepos] = useState<any[]>([]);
-  const [activeRepos, setActiveRepos] = useState<any[]>([]);
+  const [pinnedRepos, setPinnedRepos] = useState<Repo[]>([]);
+  const [activeRepos, setActiveRepos] = useState<Repo[]>([]);
+  const [commitsMap, setCommitsMap] = useState<Record<number, Commit[]>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch Activities and Repositories
+  // 🌟 State for Live Activity Animation
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [eventsRes, reposRes] = await Promise.all([
           fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=15`),
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`)
+          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`),
         ]);
 
         if (eventsRes.ok && reposRes.ok) {
           const eventsData = await eventsRes.json();
-          const reposData = await reposRes.json();
+          const reposData: Repo[] = await reposRes.json();
 
-          // 1. Filter Activity Feed (Last 5 commits/creates)
           const filteredEvents = eventsData
             .filter((event: any) => ["PushEvent", "CreateEvent"].includes(event.type))
             .slice(0, 5);
 
-          // 2. Extract Top/Pinned Repos (Sorted by Stars)
           const topRepos = [...reposData]
-            .sort((a, b) => b.stargazers_count - a.stargazers_count)
+            .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
             .slice(0, 4);
-          
-          // 3. Extract Recently Active Repos (Excluding the ones already in Top/Pinned)
-          const topRepoIds = new Set(topRepos.map(repo => repo.id));
+
+          const topRepoIds = new Set(topRepos.map((repo) => repo.id));
           const recentRepos = reposData
-            .filter((repo: any) => !topRepoIds.has(repo.id))
+            .filter((repo) => !topRepoIds.has(repo.id))
             .slice(0, 4);
 
           setEvents(filteredEvents);
           setPinnedRepos(topRepos);
           setActiveRepos(recentRepos);
+
+          const allRepos = [...topRepos, ...recentRepos];
+          const commitResults = await Promise.all(
+            allRepos.map(async (repo) => {
+              try {
+                const res = await fetch(
+                  `https://api.github.com/repos/${repo.full_name}/commits?per_page=3`
+                );
+                if (!res.ok) return { id: repo.id, commits: [] };
+                const data = await res.json();
+                const commits: Commit[] = data.map((c: any) => ({
+                  sha: c.sha,
+                  message: c.commit?.message?.split("\n")[0] || "Updated code",
+                }));
+                return { id: repo.id, commits };
+              } catch {
+                return { id: repo.id, commits: [] };
+              }
+            })
+          );
+
+          const map: Record<number, Commit[]> = {};
+          commitResults.forEach(({ id, commits }) => {
+            map[id] = commits;
+          });
+          setCommitsMap(map);
         }
       } catch (error) {
         console.error("Failed to fetch GitHub data", error);
@@ -58,207 +105,238 @@ export default function GithubActivitySection() {
     fetchData();
   }, []);
 
-  // Helper to format time like "2 hours ago"
+  // 🌟 Logic for Cycling Live Activity Events
+  useEffect(() => {
+    if (events.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentEventIndex((prevIndex) => (prevIndex + 1) % events.length);
+    }, 3500); // 3.5 seconds me slide hoga
+    return () => clearInterval(interval);
+  }, [events]);
+
   const timeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} mins ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
   if (isLoading) {
     return (
       <div className="w-full h-48 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-border border-t-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="w-full flex flex-col items-center mt-10 mb-6">
-      
-      {/* --- HEADER SECTION --- */}
-      <div className="flex flex-col items-center mb-10 space-y-3 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-background shadow-sm text-[11px] font-bold text-muted-foreground uppercase tracking-widest"
-        >
-          <BsGithub size={14} className="text-foreground" />
-          GitHub Ecosystem
-        </motion.div>
-
+    <div className="w-full flex flex-col items-center mt-10 max-w-4xl px-4 sm:px-0">
+      {/* --- HEADER --- */}
+      <div className="w-full flex flex-col items-center mb-8 md:mb-10 space-y-2.5 md:space-y-3">
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-3xl md:text-4xl font-bold tracking-tight text-surface-foreground"
+          className="text-2xl md:text-4xl font-bold tracking-tight flex items-center gap-x-3 text-surface-foreground"
         >
-          Open Source <span className="text-muted-foreground font-serif italic font-light">Footprint.</span>
+          <BsGithub size={30} className="text-foreground shrink-0 mt-0.5" />
+          <span>GITHUB</span>
+          <span className="text-muted-foreground">
+            ECOSYSTEM
+          </span>
         </motion.h2>
       </div>
 
-      <div className="w-full flex flex-col gap-5">
-        
-        {/* --- FULL WIDTH GRAPH ROW --- */}
-        <motion.div 
+      {/* Content */}
+      <div className="w-full mx-auto flex flex-col items-center gap-y-6">
+        {/* Graph */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="w-full rounded-[24px] bg-surface border border-border shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl dark:hover:shadow-neutral-900/30"
+          className={cn("overflow-hidden overflow-x-auto no-scrollbar", contentContainerCardClasses)}
         >
-          <h3 className="text-[15px] font-bold text-surface-foreground mb-4 flex items-center gap-2">
-            <FiActivity className="text-success" />
+          <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
+            <FiActivity className="text-success shrink-0" size={16} />
             Contribution Graph
           </h3>
-          {/* Scrollable container for mobile to prevent squishing */}
-          <div className="w-full overflow-x-auto no-scrollbar pb-2">
-            <div className="min-w-[700px] opacity-90 hover:opacity-100 transition-opacity">
-              {/* Dark mode filter inversion trick for the graph */}
-              <img 
-                src={GRAPH_URL} 
-                alt="GitHub Contributions" 
-                className="w-full object-contain dark:invert dark:hue-rotate-180" 
+          <div className="w-full max-w-full overflow-x-auto no-scrollbar pb-1">
+            <div className="min-w-[600px] md:min-w-[700px] opacity-90 hover:opacity-100 transition-opacity">
+              <img
+                src={GRAPH_URL}
+                alt="GitHub Contributions"
+                className="w-full object-contain dark:invert dark:hue-rotate-180"
               />
             </div>
           </div>
         </motion.div>
 
-        {/* --- REPOS & ACTIVITY GRID ROW --- */}
-        <motion.div 
+        {/* Pinned Repo */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="w-full grid grid-cols-1 lg:grid-cols-3 gap-5"
+          className={cn("", contentContainerCardClasses)}
         >
-          
-          {/* LEFT COLUMN: Pinned & Active Repositories (Spans 2 cols) */}
-          <div className="lg:col-span-2 flex flex-col gap-5">
-            
-            {/* A. Pinned / Top Repositories */}
-            <div className="w-full rounded-[24px] bg-surface border border-border shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl dark:hover:shadow-neutral-900/30">
-              <h3 className="text-[15px] font-bold text-surface-foreground mb-4 flex items-center gap-2">
-                <BsPinAngle className="text-accent" />
-                Top / Pinned Repositories
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                {pinnedRepos.map((repo) => (
-                  <RepoCard key={repo.id} repo={repo} />
-                ))}
-              </div>
-            </div>
-
-            {/* B. Recently Active Repositories */}
-            <div className="w-full rounded-[24px] bg-surface border border-border shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl dark:hover:shadow-neutral-900/30">
-              <h3 className="text-[15px] font-bold text-surface-foreground mb-4 flex items-center gap-2">
-                <BsJournalCode className="text-warning" />
-                Recently Active
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                {activeRepos.map((repo) => (
-                  <RepoCard key={repo.id} repo={repo} />
-                ))}
-              </div>
-            </div>
-            
+          <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
+            <BsPinAngle className="text-accent shrink-0" size={15} />
+            Top / Pinned Repositories
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {pinnedRepos.map((repo) => (
+              <RepoCard key={repo.id} repo={repo} commits={commitsMap[repo.id] || []} />
+            ))}
           </div>
-
-          {/* RIGHT COLUMN: Live Activity Timeline (Spans 1 col) */}
-          <div className="lg:col-span-1 w-full rounded-[24px] bg-surface border border-border shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl dark:hover:shadow-neutral-900/30">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-[15px] font-bold text-surface-foreground flex items-center gap-2">
-                <BsGit className="text-foreground" />
-                Live Activity
-              </h3>
-              <span className="relative flex size-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                <span className="relative inline-flex rounded-full size-2 bg-success"></span>
-              </span>
-            </div>
-            
-            <div className="relative border-l-2 border-border/60 ml-2 space-y-6">
-              {events.map((event) => (
-                <div key={event.id} className="relative pl-5">
-                  {/* Timeline Dot */}
-                  <span className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-success ring-4 ring-surface" />
-                  
-                  {/* Content */}
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
-                      <FiClock size={10} />
-                      {timeAgo(event.created_at)}
-                    </span>
-                    
-                    <a 
-                      href={`https://github.com/${event.repo.name}`}
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-foreground hover:text-accent transition-colors line-clamp-1"
-                    >
-                      {event.repo.name.split("/")[1]}
-                    </a>
-                    
-                    <div className="text-xs text-muted-foreground/80 mt-1.5 p-2 bg-background border border-border/60 rounded-lg line-clamp-2">
-                      <span className="text-success font-mono mr-1.5">❯</span>
-                      {event.type === "PushEvent" 
-                        ? event.payload?.commits?.[0]?.message || "Updated repository"
-                        : "Created new repository"}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <a 
-              href={`https://github.com/${GITHUB_USERNAME}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="mt-8 flex items-center justify-center w-full py-2.5 rounded-xl bg-background border border-border/60 hover:bg-secondary/50 text-xs font-semibold text-foreground transition-colors"
-            >
-              View Full Profile
-            </a>
-          </div>
-
         </motion.div>
+
+        {/* Active Repo*/}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className={cn("", contentContainerCardClasses)}
+        >
+          <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
+            <BsJournalCode className="text-warning shrink-0" size={15} />
+            Recently Active
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {activeRepos.map((repo) => (
+              <RepoCard
+                key={repo.id}
+                repo={repo}
+                commits={commitsMap[repo.id] || []}
+                showLanguage
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Live activity */}
+        <div className={cn("", contentContainerCardClasses)}>
+          <div className="flex items-center justify-between mb-4 md:mb-6 gap-2">
+            <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground flex items-center gap-2 min-w-0">
+              <BsGit className="text-foreground shrink-0" size={15} />
+              <span className="truncate">Live Activity</span>
+            </h3>
+            <span className="relative flex size-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+              <span className="relative inline-flex rounded-full size-2 bg-success" />
+            </span>
+          </div>
+
+          {/* Sliding Animation Container */}
+          <div className="relative min-h-[120px] md:min-h-[130px] flex items-center overflow-hidden bg-secondary/10 rounded-2xl px-4 md:px-6 py-4 md:py-0">
+            <AnimatePresence mode="wait">
+              {events.length > 0 && (
+                <motion.div
+                  key={currentEventIndex}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="w-full flex flex-col min-w-0"
+                >
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="flex items-center justify-center size-5 rounded-full bg-success/20 text-success shrink-0">
+                      <BsGit size={10} />
+                    </span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                      <FiClock size={10} />
+                      {timeAgo(events[currentEventIndex].created_at)}
+                    </span>
+                  </div>
+
+                  <a
+                    href={`https://github.com/${events[currentEventIndex].repo.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm md:text-[15px] font-bold text-foreground hover:text-accent transition-colors line-clamp-1 mb-2 mt-1 break-all"
+                  >
+                    {events[currentEventIndex].repo.name.split("/")[1]}
+                  </a>
+
+                  <div className="text-xs md:text-[13px] text-muted-foreground px-2.5 md:px-3 py-2 bg-secondary/50 border border-border rounded-xl line-clamp-2 leading-relaxed flex items-start gap-2">
+                    <span className="text-success font-mono mt-[1px] shrink-0">❯</span>
+                    <span className="min-w-0 break-words">
+                      {events[currentEventIndex].type === "PushEvent"
+                        ? events[currentEventIndex].payload?.commits?.[0]?.message ||
+                        "Updated repository"
+                        : "Created new repository"}
+                    </span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+
+          {/* Profile btn */}
+          <Link
+            href={`https://github.com/${GITHUB_USERNAME}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 mb-4 flex items-center justify-center gap-x-2 w-full py-2.5 md:py-3 rounded-xl border border-border bg-muted duration-300 transition-colors hover:bg-muted/80 text-xs font-bold text-foreground"
+          >
+            <SiGithub size={16} /> View Full Profile
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
-// Helper Component for Individual Repository Cards
-function RepoCard({ repo }: { repo: any }) {
+function RepoCard({
+  repo,
+  commits,
+  showLanguage = false,
+}: {
+  repo: Repo;
+  commits: Commit[];
+  showLanguage?: boolean;
+}) {
   return (
-    <a 
-      href={repo.html_url} 
-      target="_blank" 
+    <Link
+      href={repo.html_url}
+      target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col justify-between p-4 rounded-2xl bg-background border border-border/60 hover:border-border hover:shadow-sm transition-all group"
+      className="group flex flex-col gap-2.5 md:gap-3 p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-background dark:bg-background/80 dark:hover:bg-background border border-border dark:border-0 hover:border-foreground/10 dark:hover:border-0 transition-colors min-w-0 shadow-md hover:shadow-lg shadow-secondary dark:shadow-none dark:hover:shadow-none"
     >
-      <div>
-        <h4 className="font-semibold text-sm text-foreground group-hover:text-accent transition-colors line-clamp-1">
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <h4 className="font-semibold text-sm text-foreground/80 group-hover:text-foreground transition-colors line-clamp-1 min-w-0">
           {repo.name}
         </h4>
-        <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">
-          {repo.description || "No description provided for this repository."}
-        </p>
+        {showLanguage && repo.language && (
+          <span className="shrink-0 flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+            {repo.language}
+          </span>
+        )}
       </div>
-      <div className="flex items-center gap-4 mt-4 text-[11px] font-semibold text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-accent" /> 
-          {repo.language || "Markdown"}
-        </span>
-        <span className="flex items-center gap-1">
-          <BsStar size={12} /> {repo.stargazers_count}
-        </span>
+
+      <div className="flex flex-col min-w-0">
+        {commits.length > 0 ? (
+          commits.map((commit) => (
+            <p
+              key={commit.sha}
+              className="text-[12px] text-muted-foreground/80 leading-relaxed line-clamp-1 flex items-start gap-1.5 min-w-0"
+            >
+              <span className="text-muted-foreground/50 mt-[1px] shrink-0">—</span>
+              <span className="truncate">{commit.message}</span>
+            </p>
+          ))
+        ) : (
+          <p className="text-[11px] text-muted-foreground/60 italic">No recent commits</p>
+        )}
       </div>
-    </a>
+    </Link>
   );
 }

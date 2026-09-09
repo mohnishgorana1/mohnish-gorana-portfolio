@@ -51,11 +51,11 @@ export default function DesignArchivePage() {
               <Link
                 href={`/design/${item.path}`}
                 className={cn(
-                  "group relative flex flex-col justify-between h-full p-5 md:p-6 outline-none",
-                  "bg-surface/40 hover:bg-surface transition-all duration-300 ease-out",
-                  "border border-border/50 hover:border-border",
-                  "rounded-xl md:rounded-2xl",
-                  "shadow-sm hover:shadow-md hover:-translate-y-1"
+                 "min-h-66 group relative flex flex-col justify-between h-full p-5 md:p-6 outline-none",
+                "bg-secondary/10 hover:bg-secondary/30  transition-all duration-300 ease-out",
+                "border-2 border-border/70 dark:border-border/50 hover:border-border",
+                "rounded-xl md:rounded-2xl",
+                "shadow-sm hover:shadow-md shadow-muted dark:shadow-muted/10 hover:-translate-y-1"
                 )}
               >
                 {/* TOP: Inspiration Tag & Icon */}
