@@ -123,17 +123,17 @@ export default function HeroSection() {
               </Link>
 
               <div className="relative w-36 md:w-38 h-10 shrink-0">
-                {!isContactOpen && (
-                  <motion.button
-                    layoutId="contact-modal-wrapper"
-                    onClick={() => setIsContactOpen(true)}
-                    style={{ borderRadius: 99 }}
-                    className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 text-foreground shadow-sm hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50 transition-colors duration-300"
-                  >
-                    <MdContactMail size={16} className="mr-2" />
-                    <span className="pb-0.5">Contact</span>
-                  </motion.button>
-                )}
+                {/* {!isContactOpen && ( */}
+                <motion.button
+                  layoutId="contact-modal-wrapper"
+                  onClick={() => setIsContactOpen(true)}
+                  style={{ borderRadius: 99 }}
+                  className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 text-foreground shadow-sm transition-all hover:scale-105 active:scale-95 duration-300 hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50"
+                >
+                  <MdContactMail size={16} className="mr-2" />
+                  <span className="pb-0.5">Contact</span>
+                </motion.button>
+                {/* )} */}
               </div>
 
               <div className="hidden md:flex items-center gap-4 ml-4">

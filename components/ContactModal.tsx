@@ -52,7 +52,7 @@ export default function ContactModal({ isContactPage = false, onClose }: Contact
         setTimeout(() => {
           setIsSuccess(false);
           // Sirf tabhi close karein jab ye Modal ki tarah open ho
-          if (!isContactPage && onClose) onClose(); 
+          if (!isContactPage && onClose) onClose();
         }, 3000);
       } else {
         setStatus("Submission failed. Please try again.");
@@ -72,14 +72,16 @@ export default function ContactModal({ isContactPage = false, onClose }: Contact
 
   const contactCard = (
     <motion.div
-      // LayoutId sirf Modal mode me denge
-      layoutId={!isContactPage ? "contact-modal-wrapper" : undefined}
       style={{ borderRadius: 28 }}
+      initial={!isContactPage ? { opacity: 0, scale: 0.95, y: 15 } : { opacity: 0, y: 20 }}
+      animate={!isContactPage ? { opacity: 1, scale: 1, y: 0 } : { opacity: 1, y: 0 }}
+      exit={!isContactPage ? { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.15 } } : undefined}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className={cn(
         "w-full max-w-4xl bg-surface border border-border relative",
-        isContactPage 
-          ? "mx-auto shadow-lg" // 📄 Page Layout: Normal margins, no scrollbar hiding
-          : "max-h-[95vh] overflow-y-auto overflow-x-hidden shadow-2xl pointer-events-auto no-scrollbar" // 🪟 Modal Layout: Scrollable, max-height
+        isContactPage
+          ? "mx-auto shadow-lg"
+          : "max-h-[95vh] overflow-y-auto overflow-x-hidden shadow-2xl pointer-events-auto no-scrollbar"
       )}
     >
       <motion.div
@@ -256,7 +258,7 @@ export default function ContactModal({ isContactPage = false, onClose }: Contact
   if (isContactPage) {
     return (
       <div className="w-full px-4 sm:px-6">
-         {contactCard}
+        {contactCard}
       </div>
     );
   }
