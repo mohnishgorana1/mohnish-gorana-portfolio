@@ -7,22 +7,10 @@ import { FiActivity, FiClock } from "react-icons/fi";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SiGithub } from "react-icons/si";
+import type { GithubActivityData, Commit, Repo } from "@/lib/github";
 
 const GITHUB_USERNAME = "mohnishgorana1";
 const GRAPH_URL = `https://ghchart.rshah.org/10b981/${GITHUB_USERNAME}`;
-
-type Commit = {
-  sha: string;
-  message: string;
-};
-
-type Repo = {
-  id: number;
-  name: string;
-  html_url: string;
-  language: string | null;
-  full_name: string;
-};
 
 const contentContainerCardClasses =
   `w-full max-w-full rounded-2xl md:rounded-3xl p-4 md:p-6 flex flex-col overflow-hidden
@@ -30,87 +18,18 @@ const contentContainerCardClasses =
   border border-border dark:border-0
   shadow-lg hover:shadow-xl shadow-secondary dark:shadow-none dark:hover:shadow-none transition-all duration-300`
 
-export default function GithubActivitySection() {
-  const [events, setEvents] = useState<any[]>([]);
-  const [pinnedRepos, setPinnedRepos] = useState<Repo[]>([]);
-  const [activeRepos, setActiveRepos] = useState<Repo[]>([]);
-  const [commitsMap, setCommitsMap] = useState<Record<number, Commit[]>>({});
-  const [isLoading, setIsLoading] = useState(true);
+// 🌟 Data now arrives as a prop — fetched server-side in page.tsx
+export default function GithubActivitySection({ data }: { data: GithubActivityData }) {
+  const { events, pinnedRepos, activeRepos, commitsMap } = data;
 
-  // 🌟 State for Live Activity Animation
+  // 🌟 Only the live-activity slideshow index remains client state
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [eventsRes, reposRes] = await Promise.all([
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=15`),
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`),
-        ]);
-
-        if (eventsRes.ok && reposRes.ok) {
-          const eventsData = await eventsRes.json();
-          const reposData: Repo[] = await reposRes.json();
-
-          const filteredEvents = eventsData
-            .filter((event: any) => ["PushEvent", "CreateEvent"].includes(event.type))
-            .slice(0, 5);
-
-          const topRepos = [...reposData]
-            .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
-            .slice(0, 4);
-
-          const topRepoIds = new Set(topRepos.map((repo) => repo.id));
-          const recentRepos = reposData
-            .filter((repo) => !topRepoIds.has(repo.id))
-            .slice(0, 4);
-
-          setEvents(filteredEvents);
-          setPinnedRepos(topRepos);
-          setActiveRepos(recentRepos);
-
-          const allRepos = [...topRepos, ...recentRepos];
-          const commitResults = await Promise.all(
-            allRepos.map(async (repo) => {
-              try {
-                const res = await fetch(
-                  `https://api.github.com/repos/${repo.full_name}/commits?per_page=3`
-                );
-                if (!res.ok) return { id: repo.id, commits: [] };
-                const data = await res.json();
-                const commits: Commit[] = data.map((c: any) => ({
-                  sha: c.sha,
-                  message: c.commit?.message?.split("\n")[0] || "Updated code",
-                }));
-                return { id: repo.id, commits };
-              } catch {
-                return { id: repo.id, commits: [] };
-              }
-            })
-          );
-
-          const map: Record<number, Commit[]> = {};
-          commitResults.forEach(({ id, commits }) => {
-            map[id] = commits;
-          });
-          setCommitsMap(map);
-        }
-      } catch (error) {
-        console.error("Failed to fetch GitHub data", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // 🌟 Logic for Cycling Live Activity Events
   useEffect(() => {
     if (events.length === 0) return;
     const interval = setInterval(() => {
       setCurrentEventIndex((prevIndex) => (prevIndex + 1) % events.length);
-    }, 3500); // 3.5 seconds me slide hoga
+    }, 3500);
     return () => clearInterval(interval);
   }, [events]);
 
@@ -124,14 +43,6 @@ export default function GithubActivitySection() {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
-
-  if (isLoading) {
-    return (
-      <div className="w-full h-48 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-border border-t-foreground" />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full flex flex-col items-center mt-10 max-w-4xl px-4 sm:px-0">
@@ -178,47 +89,51 @@ export default function GithubActivitySection() {
         </motion.div>
 
         {/* Pinned Repo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className={cn("", contentContainerCardClasses)}
-        >
-          <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
-            <BsPinAngle className="text-accent shrink-0" size={15} />
-            Top / Pinned Repositories
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {pinnedRepos.map((repo) => (
-              <RepoCard key={repo.id} repo={repo} commits={commitsMap[repo.id] || []} />
-            ))}
-          </div>
-        </motion.div>
+        {pinnedRepos.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className={cn("", contentContainerCardClasses)}
+          >
+            <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
+              <BsPinAngle className="text-accent shrink-0" size={15} />
+              Top / Pinned Repositories
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {pinnedRepos.map((repo) => (
+                <RepoCard key={repo.id} repo={repo} commits={commitsMap[repo.id] || []} />
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Active Repo*/}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className={cn("", contentContainerCardClasses)}
-        >
-          <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
-            <BsJournalCode className="text-warning shrink-0" size={15} />
-            Recently Active
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {activeRepos.map((repo) => (
-              <RepoCard
-                key={repo.id}
-                repo={repo}
-                commits={commitsMap[repo.id] || []}
-                showLanguage
-              />
-            ))}
-          </div>
-        </motion.div>
+        {activeRepos.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className={cn("", contentContainerCardClasses)}
+          >
+            <h3 className="text-sm md:text-[15px] font-bold text-surface-foreground mb-3 md:mb-4 flex items-center gap-2">
+              <BsJournalCode className="text-warning shrink-0" size={15} />
+              Recently Active
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {activeRepos.map((repo) => (
+                <RepoCard
+                  key={repo.id}
+                  repo={repo}
+                  commits={commitsMap[repo.id] || []}
+                  showLanguage
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Live activity */}
         <div className={cn("", contentContainerCardClasses)}>
@@ -236,7 +151,7 @@ export default function GithubActivitySection() {
           {/* Sliding Animation Container */}
           <div className="relative min-h-[120px] md:min-h-[130px] flex items-center overflow-hidden bg-secondary/10 rounded-2xl px-4 md:px-6 py-4 md:py-0">
             <AnimatePresence mode="wait">
-              {events.length > 0 && (
+              {events.length > 0 ? (
                 <motion.div
                   key={currentEventIndex}
                   initial={{ opacity: 0, y: 30 }}
@@ -274,6 +189,8 @@ export default function GithubActivitySection() {
                     </span>
                   </div>
                 </motion.div>
+              ) : (
+                <p className="text-xs text-muted-foreground/70 italic">No recent activity found.</p>
               )}
             </AnimatePresence>
           </div>

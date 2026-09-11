@@ -204,7 +204,7 @@ const Navbar = () => {
       {/* Mobile Navbar (Visible on Mobile) */}
       {/* ======================================= */}
       <nav
-        className={`max-w-[24rem] w-[calc(100%-2rem)] md:hidden z-50 flex items-center justify-between gap-1 px-2 py-2 ${navContainerClasses}`}
+        className={`max-w-[24rem] w-[calc(100%-2rem)] md:hidden z-50 flex items-center justify-between gap-3 px-2 py-2 ${navContainerClasses}`}
       >
         <Link
           href="/"
@@ -222,7 +222,7 @@ const Navbar = () => {
           <Code size={19} />
         </Link>
 
-        <div className="w-px h-6 bg-border/80 mx-0.5 shrink-0" />
+        <div className="w-0.5 h-6 bg-border/80 dark:bg-border mx-0.5 shrink-0" />
 
         <Link
           href="https://github.com/mohnishgorana1"
@@ -242,7 +242,7 @@ const Navbar = () => {
           <BsLinkedin size={18} />
         </Link>
 
-        <div className="w-px h-6 bg-border/80 mx-0.5 shrink-0" />
+        <div className="w-0.5 h-6 bg-border/80 dark:bg-border mx-0.5 shrink-0" />
 
         <div className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-secondary/60 transition-colors shrink-0">
           <ThemeToggle />

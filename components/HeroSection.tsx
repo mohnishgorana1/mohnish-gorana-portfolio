@@ -68,7 +68,7 @@ export default function HeroSection() {
           className={cn(
             "w-full p-5 sm:p-6 flex flex-col gap-5 rounded-3xl",
             "bg-surface dark:bg-surface/50 transition-all duration-500",
-            "border border-border shadow-lg hover:shadow-surface-foreground/20 hover:shadow-xl dark:hover:shadow-neutral-900/30 dark:hover:shadow-lg"
+            "border-2 border-border/50 shadow-lg hover:shadow-surface-foreground/20 hover:shadow-xl dark:hover:shadow-neutral-900/30 dark:hover:shadow-lg"
           )}
         >
           {/* ===== IDENTITY ROW: avatar + name/role/meta ===== */}
@@ -124,7 +124,7 @@ export default function HeroSection() {
           <div className="flex flex-wrap items-center gap-3">
             {/* VIEW RESUME BUTTON */}
             <Link
-              href="https://drive.google.com/file/d/1bIlkdTT1k4Pwi3srKD947iK_u9S3yN7q/view?usp=drive_link"
+              href="/resume"
               target="_blank"
               rel="noopener noreferrer"
               className="cursor-pointer"

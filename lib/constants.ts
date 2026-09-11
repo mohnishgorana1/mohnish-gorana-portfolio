@@ -1,5 +1,9 @@
 // /lib/constant.ts
 
+
+export const RESUME_LINK = "https://drive.google.com/file/d/1bIlkdTT1k4Pwi3srKD947iK_u9S3yN7q/view?usp=drive_link";
+
+
 import {
   Globe,
   Server,

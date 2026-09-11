@@ -1,34 +1,65 @@
+import BlogsSection from "@/components/BlogsSection";
+import FinalCTA from "@/components/FinalCTA";
 import GithubActivitySection from "@/components/GithubActivitySection";
 import HeroSection from "@/components/HeroSection";
 import ProjectsSection from "@/components/ProjectsSection";
+import { fetchGithubActivityData } from "@/lib/github";
 
-export default function Home() {
+export default async function Home() {
+  const githubData = await fetchGithubActivityData();
+
   return (
     <main className="max-w-4xl mx-auto mt-4 md:mt-6 space-y-8 md:space-y-10">
-      
+
       <section className="">
         <HeroSection />
       </section>
 
-      <div className="w-full border border-border/60 dark:border-border/20"></div>
+      <Divider />
 
       <section id="projects" className="">
         <ProjectsSection isHome={true} />
       </section>
 
-      <div className="w-full border border-border/60 dark:border-border/20"></div>
+      <Divider />
+
 
       <section id="github" className="">
-        <GithubActivitySection />
+        <GithubActivitySection data={githubData} />
+      </section>
+
+      <Divider />
+
+
+      <section id="blogs" className="">
+        <BlogsSection />
       </section>
 
 
-      {/* <section id="github" className="">
+      <section id="contact" className="mt-4 md:mt-8">
+        <FinalCTA />
+      </section>
+
+      <Divider />
+
+    </main>
+  );
+
+
+}
+
+
+const Divider = () => {
+  return (
+    <div className="w-full border border-border/60 dark:border-border/50"></div>
+  )
+}
+
+
+{/* <section id="github" className="">
         <GithubActivitySection />
       </section>
-      <section id="stats" className="">
-        <BentoGridSection />
-      </section>
+     
      
       <section id="about" className="">
         <AboutSection />
@@ -39,6 +70,3 @@ export default function Home() {
       <section className="">
         <WhatICanOffer />
       </section> */}
-    </main>
-  );
-}
