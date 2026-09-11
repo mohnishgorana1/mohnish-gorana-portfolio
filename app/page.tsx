@@ -1,12 +1,6 @@
-import AboutSection from "@/components/AboutSection";
-import BentoGridSection from "@/components/BentoGrid";
-import ContactMe from "@/components/ContactMe";
 import GithubActivitySection from "@/components/GithubActivitySection";
 import HeroSection from "@/components/HeroSection";
 import ProjectsSection from "@/components/ProjectsSection";
-import WhatICanOffer from "@/components/WhatICanOffer";
-import { Link } from "lucide-react";
-import { FiChevronDown } from "react-icons/fi";
 
 export default function Home() {
   return (
