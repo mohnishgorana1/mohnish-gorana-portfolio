@@ -133,7 +133,7 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
+                className="w-auto md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
               >
                 <FileText size={16} className="mr-2" />
                 <span>View Resume</span>
@@ -148,7 +148,7 @@ export default function HeroSection() {
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               style={{ borderRadius: 99 }}
-              className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50"
+              className="w-auto md:w-40 h-10 px-4 inline-flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50"
             >
               <MdContactMail size={16} className="mr-2" />
               <span>Contact</span>
@@ -160,7 +160,7 @@ export default function HeroSection() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
+              className="w-auto md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
             >
               <MdMessage size={16} className="mr-2" />
               <span>AI Chat</span>
