@@ -55,7 +55,7 @@ export default function HeroSection() {
   const [isPhotoOpen, setIsPhotoOpen] = useState(false);
 
   return (
-    <section className="w-full min-h-[75vh] relative">
+    <section className="w-full relative">
       <motion.div
         className="flex flex-col w-full mx-auto gap-4"
         initial="hidden"
@@ -66,7 +66,7 @@ export default function HeroSection() {
         <motion.div
           variants={itemVariants}
           className={cn(
-            "w-full p-5 sm:p-6 flex flex-col gap-5 rounded-3xl",
+            "w-full p-5 sm:p-6 flex flex-col gap-4 rounded-3xl",
             "bg-surface dark:bg-surface/50 transition-all duration-500",
             "border-2 border-border/50 shadow-lg hover:shadow-surface-foreground/20 hover:shadow-xl dark:hover:shadow-neutral-900/30 dark:hover:shadow-lg"
           )}
@@ -80,7 +80,7 @@ export default function HeroSection() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-border bg-muted shrink-0 cursor-pointer"
+              className="relative w-22 h-22 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-border bg-muted shrink-0 cursor-pointer"
             >
               <Image
                 src="/assets/p1.png"
@@ -92,29 +92,29 @@ export default function HeroSection() {
             </motion.div>
 
             <div className="flex flex-col min-w-0">
-              <h1 className="text-[20px] sm:text-2xl md:text-3xl font-bold leading-tight text-surface-foreground/90 dark:text-surface-foreground/70 truncate">
+              <h1 className="text-[20px] sm:text-2xl md:text-4xl font-bold leading-tight text-surface-foreground/90 dark:text-surface-foreground/70 truncate">
                 Mohnish Gorana
               </h1>
-              <h2 className="text-[13px] md:text-[15px] mt-0.5 text-muted-foreground">
+              <h2 className="text-[13px] md:text-[16px] mt-0.5 text-muted-foreground">
                 Full-Stack Web Developer
               </h2>
-              <p className="text-[12px] md:text-[13px] text-muted-foreground/80 truncate">
+              <p className="text-[12px] md:text-[15px] text-muted-foreground/80 truncate">
                 MERN Stack · Next.js · GenAI · AI Agents
               </p>
             </div>
           </div>
 
           {/* ===== META ROW: location + availability badge ===== */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex flex-col items-start gap-x-4 gap-y-1">
             <span className="text-[12px] md:text-[13px] text-muted-foreground">
               📍 Neemuch, Madhya Pradesh, India
             </span>
-            <div className="flex items-center gap-2">
-              <span className="text-[12px] md:text-[13px] text-success font-medium">Available for work</span>
+            <div className="pl-1 flex items-center gap-2">
               <span className="relative flex size-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                 <span className="relative inline-flex rounded-full size-2 bg-success/70" />
               </span>
+              <span className="text-[12px] md:text-[13px] text-success font-medium">Available for work</span>
             </div>
           </div>
 
@@ -133,7 +133,7 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
+                className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
               >
                 <FileText size={16} className="mr-2" />
                 <span>View Resume</span>
@@ -148,7 +148,7 @@ export default function HeroSection() {
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               style={{ borderRadius: 99 }}
-              className="h-10 px-4 inline-flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50"
+              className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-md border border-transparent dark:border-border/50"
             >
               <MdContactMail size={16} className="mr-2" />
               <span>Contact</span>
@@ -160,14 +160,14 @@ export default function HeroSection() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
+              className="w-34 md:w-40 h-10 px-4 inline-flex items-center justify-center rounded-full cursor-pointer font-semibold text-[12px] md:text-sm bg-secondary/50 hover:bg-muted/30 hover:text-foreground text-foreground/80 transition-colors shadow-sm hover:shadow-md dark:shadow-none border border-transparent dark:border-border/50"
             >
               <MdMessage size={16} className="mr-2" />
               <span>AI Chat</span>
             </motion.button>
 
             {/* spacer pushes social icons to the right on wide screens, wraps naturally on narrow ones */}
-            <div className="flex items-center gap-3 sm:ml-auto">
+            <div className="hidden md:flex items-center gap-3 sm:ml-auto">
               <motion.a
                 href="https://github.com/mohnishgorana1"
                 target="_blank"
