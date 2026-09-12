@@ -32,7 +32,7 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/mohnish-gorana-804374340/",
+    href: "https://www.linkedin.com/in/mohnish-gorana/",
     icon: <BsLinkedin className="w-1/2 h-1/2" />,
     isExternal: true,
   },
@@ -234,7 +234,7 @@ const Navbar = () => {
         </Link>
 
         <Link
-          href="https://www.linkedin.com/in/mohnish-gorana-804374340/"
+          href="https://www.linkedin.com/in/mohnish-gorana"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center w-10 h-10 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/60 active:bg-secondary transition-colors shrink-0"

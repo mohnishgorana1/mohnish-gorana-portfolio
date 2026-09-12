@@ -16,7 +16,7 @@ const socialTextVariants = {
 
 const SOCIAL_LINKS = [
   { icon: BsWhatsapp, href: "https://wa.me/+917999517181", title: "WhatsApp", color: "hover:text-green-500 hover:border-green-500/50" },
-  { icon: BsLinkedin, href: "https://www.linkedin.com/in/mohnish-gorana-804374340/", title: "LinkedIn", color: "hover:text-blue-500 hover:border-blue-500/50" },
+  { icon: BsLinkedin, href: "https://www.linkedin.com/in/mohnish-gorana", title: "LinkedIn", color: "hover:text-blue-500 hover:border-blue-500/50" },
   { icon: BsGithub, href: "https://github.com/mohnishgorana1", title: "GitHub", color: "hover:text-foreground hover:border-border" },
 ];
 

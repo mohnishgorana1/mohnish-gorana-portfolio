@@ -24,9 +24,14 @@ export default async function Home() {
       <Divider />
 
 
-      <section id="github" className="">
-        <GithubActivitySection data={githubData} />
-      </section>
+      {githubData.success && (
+        <>
+          <Divider />
+          <section id="github" className="">
+            <GithubActivitySection data={githubData} />
+          </section>
+        </>
+      )}
 
       <Divider />
 

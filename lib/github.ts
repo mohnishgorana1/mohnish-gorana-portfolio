@@ -24,14 +24,15 @@ export type GithubEvent = {
 };
 
 export type GithubActivityData = {
+    success: boolean; // 🌟 tells the page whether the fetch actually worked
     events: GithubEvent[];
     pinnedRepos: Repo[];
     activeRepos: Repo[];
     commitsMap: Record<number, Commit[]>;
 };
 
-// Empty fallback shape — used if the GitHub API fails, so the page never crashes
 const EMPTY_DATA: GithubActivityData = {
+    success: false,
     events: [],
     pinnedRepos: [],
     activeRepos: [],
@@ -42,7 +43,7 @@ export async function fetchGithubActivityData(): Promise<GithubActivityData> {
     try {
         const [eventsRes, reposRes] = await Promise.all([
             fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=15`, {
-                next: { revalidate: 900 }, // cache 15 min on the server
+                next: { revalidate: 900 },
             }),
             fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`, {
                 next: { revalidate: 900 },
@@ -56,6 +57,12 @@ export async function fetchGithubActivityData(): Promise<GithubActivityData> {
 
         const eventsData: GithubEvent[] = await eventsRes.json();
         const reposData: Repo[] = await reposRes.json();
+
+        // GitHub API sometimes returns an object (e.g. rate-limit message) instead of an array
+        if (!Array.isArray(eventsData) || !Array.isArray(reposData)) {
+            console.error("[github] Unexpected response shape", { eventsData, reposData });
+            return EMPTY_DATA;
+        }
 
         const filteredEvents = eventsData
             .filter((event) => ["PushEvent", "CreateEvent"].includes(event.type))
@@ -96,6 +103,7 @@ export async function fetchGithubActivityData(): Promise<GithubActivityData> {
         });
 
         return {
+            success: true,
             events: filteredEvents,
             pinnedRepos: topRepos,
             activeRepos: recentRepos,

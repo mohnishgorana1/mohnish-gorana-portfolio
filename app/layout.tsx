@@ -16,37 +16,103 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const SITE_URL = "https://mohnish-gorana-portfolio.vercel.app";
+const OG_IMAGE_URL = `${SITE_URL}/assets/favicons/og_image.png`;
+const SITE_TITLE = "Mohnish Gorana | Full Stack Developer";
+const SITE_DESCRIPTION =
+  "Portfolio of Mohnish Gorana, a Full-Stack Developer specializing in MERN, Next.js, and GenAI integrations.";
+
 export const metadata: Metadata = {
-  title: "Mohnish Gorana | Full Stack Developer",
-  description: "Portfolio of Mohnish Gorana, a Full-Stack Developer specializing in MERN, Next.js, and GenAI integrations.",
-  keywords: ["Mohnish Gorana", "Portfolio", "Web Developer", "Next.js"],
-  authors: [{ name: "Mohnish Gorana", url: "https://mohnish-gorana-portfolio.vercel.app/" }],
-  openGraph: {
-    title: "Mohnish Gorana | Full Stack Developer",
-    description: "Personal portfolio showcasing my web development projects and skills.",
-    url: "https://mohnish-gorana-portfolio.vercel.app/",
-    siteName: "Mohnish Gorana Portfolio",
-    images: [{ url: "https://mohnish-gorana-portfolio.vercel.app/assets/favicons/og_image.png", width: 1200, height: 630, alt: "Mohnish Gorana Portfolio Preview" }],
-    type: "website",
+  metadataBase: new URL(SITE_URL),
+
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Mohnish Gorana",
   },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "Mohnish Gorana",
+    "Portfolio",
+    "Full Stack Developer",
+    "Web Developer",
+    "Next.js Developer",
+    "MERN Stack Developer",
+    "React Developer India",
+    "GenAI Developer",
+  ],
+  authors: [{ name: "Mohnish Gorana", url: SITE_URL }],
+  creator: "Mohnish Gorana",
+  publisher: "Mohnish Gorana",
+  category: "technology",
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Mohnish Gorana Portfolio",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: "Mohnish Gorana — Full Stack Developer Portfolio",
+        type: "image/png",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    site: "@mohnish_gorana_",
+    creator: "@mohnish_gorana_",
+    images: [OG_IMAGE_URL],
+  },
+
   icons: {
     icon: [
       { url: "/assets/favicons/favicon.ico" },
       { url: "/assets/favicons/favicon.svg", type: "image/svg+xml" },
       { url: "/assets/favicons/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/assets/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/assets/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
-    apple: [{ url: "/assets/favicons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [
+      { url: "/assets/favicons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: ["/assets/favicons/favicon.ico"],
   },
+
   manifest: "/assets/favicons/site.webmanifest",
-  twitter: {
-    card: "summary_large_image",
-    title: "Mohnish Gorana | Full Stack Developer",
-    description: "Check out my projects and web development skills.",
-    creator: "@mohnish_gorana_",
-    images: ["https://mohnish-gorana-portfolio.vercel.app/assets/favicons/og_image.png"],
+
+  alternates: {
+    canonical: SITE_URL,
   },
-  alternates: { canonical: "https://mohnish-gorana-portfolio.vercel.app" },
-  verification: { google: "SNsALIflaOjOixcI4laSP1NJT1e0Qu5eEaJmtrpikkE" },
+
+  verification: {
+    google: "SNsALIflaOjOixcI4laSP1NJT1e0Qu5eEaJmtrpikkE",
+  },
+
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -56,8 +122,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Mohnish Gorana",
-    url: "https://mohnish-gorana-portfolio.vercel.app/",
+    url: SITE_URL,
+    image: OG_IMAGE_URL,
     jobTitle: "Full Stack Developer",
+    description: SITE_DESCRIPTION,
     sameAs: [
       "https://github.com/mohnishgorana1",
       "https://www.linkedin.com/in/mohnish-gorana-804374340/",

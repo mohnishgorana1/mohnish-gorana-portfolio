@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Download, ArrowLeft, ExternalLink, AlertCircle } from "lucide-react";
+import { Download, ArrowLeft, ExternalLink, AlertCircle, FileWarning } from "lucide-react";
 import Link from "next/link";
 import { RESUME_LINK } from "@/lib/constants";
 import dynamic from "next/dynamic";
-import { cn } from "@/lib/utils"; // Make sure cn is imported
+import { cn } from "@/lib/utils";
 
-// Dynamically import react-pdf components with SSR disabled
 const Document = dynamic(() => import("react-pdf").then((mod) => mod.Document), { ssr: false });
 const Page = dynamic(() => import("react-pdf").then((mod) => mod.Page), { ssr: false });
 
@@ -21,7 +20,7 @@ const getDriveId = (url: string) => {
 };
 
 const ResumeSkeleton = () => (
-  <div className="w-full bg-white p-8 sm:p-12 animate-pulse min-h-250 flex flex-col gap-6 rounded-xl border border-border/50 shadow-sm">
+  <div className="w-full bg-white p-8 sm:p-12 animate-pulse min-h-[130vh] flex flex-col gap-6 rounded-xl border border-border/80 shadow-sm">
     {/* Header */}
     <div className="flex flex-col items-center gap-3 mb-2">
       <div className="h-8 w-64 bg-slate-200 rounded-md" />
@@ -95,10 +94,37 @@ const ResumeSkeleton = () => (
   </div>
 );
 
+// 🌟 Centered fallback shown whenever the PDF can't be rendered for any reason
+const ResumeUnavailable = () => (
+  <div className="w-full flex flex-col items-center justify-center gap-4 py-24 sm:py-32 text-center px-4">
+    <div className="flex items-center justify-center size-14 rounded-full bg-secondary/50 border border-border/60 text-muted-foreground">
+      <FileWarning size={24} />
+    </div>
+    <div className="flex flex-col gap-1.5">
+      <p className="text-sm sm:text-base font-bold text-foreground">
+        Resume can&apos;t be displayed right now.
+      </p>
+      <p className="text-xs sm:text-sm text-muted-foreground">
+        Please download it instead.
+      </p>
+    </div>
+    <a
+      href={RESUME_LINK}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2 flex items-center gap-2 px-5 h-10 rounded-xl bg-foreground text-background font-bold text-[13px] hover:opacity-90 transition-opacity shadow-md"
+    >
+      <ExternalLink size={15} />
+      Open / Download
+    </a>
+  </div>
+);
+
 export default function ResumePage() {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>(800);
-  const [isPdfLoaded, setIsPdfLoaded] = useState<boolean>(false); // 🌟 Manual load state
+  const [isPdfLoaded, setIsPdfLoaded] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false); // 🌟 tracks any PDF load/render failure
   const containerRef = useRef<HTMLDivElement>(null);
 
   const fileId = getDriveId(RESUME_LINK);
@@ -125,9 +151,16 @@ export default function ResumePage() {
     setNumPages(numPages);
   }
 
+  // 🌟 Fires when the PDF fails to load/parse (corrupt file, API route error response, network failure, etc.)
+  function onDocumentLoadError(error: Error) {
+    console.error("PDF load error:", error);
+    setHasError(true);
+  }
+
   const handleDownload = async () => {
     try {
       const response = await fetch('/api/resume');
+      if (!response.ok) throw new Error("Resume fetch failed");
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -143,7 +176,7 @@ export default function ResumePage() {
   };
 
   return (
-    <main className="max-w-4xl mx-auto w-full flex flex-col min-h-screen pt-6 md:pt-8 pb-10">
+    <main className="max-w-4xl mx-auto w-full flex flex-col min-h-[150vh] pt-6 md:pt-8 pb-10">
 
       {/* Header Section */}
       <motion.div
@@ -197,22 +230,20 @@ export default function ResumePage() {
         ref={containerRef}
         className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center relative px-4"
       >
-        {!fileId ? (
-          <div className="flex flex-col items-center justify-center text-muted-foreground gap-3 pt-20">
-            <AlertCircle size={32} className="text-error" />
-            <p className="text-sm font-semibold">Invalid Google Drive Link in constants.ts</p>
-          </div>
+        {!fileId || hasError ? (
+          // 🌟 Single, clean centered fallback — covers both "invalid link" and "load failed" cases
+          <ResumeUnavailable />
         ) : (
           <div className="relative w-full flex justify-center">
 
-            {/* 🌟 Manually Controlled Skeleton Overlay */}
+            {/* Skeleton Overlay — only while we don't yet know the outcome */}
             {!isPdfLoaded && (
               <div className="absolute inset-0 z-20 w-full flex justify-center">
                 <ResumeSkeleton />
               </div>
             )}
 
-            {/* 🌟 PDF Viewer */}
+            {/* PDF Viewer */}
             <div className={cn(
               "w-full flex justify-center rounded-xl overflow-hidden shadow-2xl border border-border/50 bg-white transition-opacity duration-300",
               isPdfLoaded ? "opacity-100" : "opacity-0"
@@ -220,13 +251,9 @@ export default function ResumePage() {
               <Document
                 file="/api/resume"
                 onLoadSuccess={onDocumentLoadSuccess}
-                loading={null} // Default loading disabled, we are handling it above
-                error={
-                  <div className="flex flex-col items-center justify-center gap-3 py-32 bg-background w-full">
-                    <AlertCircle size={32} className="text-error" />
-                    <p className="text-sm font-semibold text-muted-foreground">Couldn&apos;t render PDF. Please use the open button.</p>
-                  </div>
-                }
+                onLoadError={onDocumentLoadError}
+                loading={null}
+                error={null} // 🌟 handled centrally via hasError + ResumeUnavailable instead
               >
                 {Array.from(new Array(numPages || 0), (el, index) => (
                   <Page
@@ -237,6 +264,7 @@ export default function ResumePage() {
                     renderTextLayer={true}
                     renderAnnotationLayer={true}
                     onRenderSuccess={() => setIsPdfLoaded(true)}
+                    onRenderError={() => setHasError(true)}
                     className="mb-2"
                   />
                 ))}
