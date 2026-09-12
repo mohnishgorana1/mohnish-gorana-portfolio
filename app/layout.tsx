@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 const SITE_URL = "https://mohnish-gorana-portfolio.vercel.app";
-const OG_IMAGE_URL = `${SITE_URL}/assets/favicons/og_image.png`;
+const OG_IMAGE_URL = `${SITE_URL}/assets/favicons/og_image_v2.png`;
 const SITE_TITLE = "Mohnish Gorana | Full Stack Developer";
 const SITE_DESCRIPTION =
   "Portfolio of Mohnish Gorana, a Full-Stack Developer specializing in MERN, Next.js, and GenAI integrations.";
